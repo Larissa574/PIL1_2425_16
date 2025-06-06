@@ -1,0 +1,189 @@
+ 
+ body {
+    font-family: Arial, sans-serif; /* Utilisation d'une police web-safe */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Hauteur minimale de la fenêtre pour centrer le contenu */
+    /* Pour une utilisation hors ligne, remplacez cette URL par le chemin local de votre image */
+    /* Exemple: background-image: url('images/route_benin.jpg'); */
+    background-image: url('image/image.png'); /* Image de fond (à remplacer) */
+    background-size: cover; /* L'image couvre toute la zone */
+    background-position: center; /* L'image est centrée */
+    background-attachment: fixed; /* L'image de fond reste fixe au défilement */
+    color: #333; /* Couleur de texte par défaut */
+    line-height: 1.6; /* Hauteur de ligne pour une meilleure lisibilité */
+}
+
+/* Conteneur principal du contenu */
+.container-custom {
+    background-color: rgba(255, 255, 255, 0.8); /* Fond blanc plus transparent */
+    border-radius: 1rem; /* Bords arrondis */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Ombre portée pour un effet de profondeur */
+    padding: 2.5rem; /* Espacement interne */
+    text-align: center;
+    max-width: 48rem; /* Largeur maximale */
+    width: 90%; /* Largeur fluide */
+    animation: fadeIn 1s ease-out; /* Animation d'apparition */
+}
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Titre principal */
+.h1-custom {
+    font-size: 2.5rem; /* Taille de police */
+    font-weight: 800; /* Gras extra */
+    color: #0056b3; /* Bleu foncé */
+    margin-bottom: 1.5rem; /* Marge inférieure */
+    line-height: 1.2; /* Hauteur de ligne */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Légère ombre sur le texte */
+}
+
+/* Paragraphe descriptif */
+.p-custom {
+    font-size: 1.15rem; /* Taille de police */
+    color: #555; /* Gris foncé */
+    margin-bottom: 2.5rem; /* Marge inférieure */
+    line-height: 1.7; /* Hauteur de ligne */
+}
+
+/* Conteneur des boutons */
+.buttons-container-custom {
+    display: flex;
+    flex-direction: column; /* Disposition en colonne par défaut */
+    justify-content: center;
+    gap: 1.25rem; /* Espacement entre les boutons */
+    margin-bottom: 3rem; /* Marge inférieure */
+}
+
+/* Pour les écrans plus larges, les boutons sont en ligne */
+@media (min-width: 768px) {
+    .buttons-container-custom {
+        flex-direction: row;
+    }
+}
+
+/* Style des boutons d'appel à l'action */
+.cta-btn-custom {
+    display: inline-block;
+    font-weight: 700; /* Gras */
+    padding: 0.8rem 2.5rem; /* Espacement interne */
+    border-radius: 2rem; /* Bords très arrondis */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
+    transition: all 0.3s ease-in-out; /* Transition douce pour les effets */
+    text-decoration: none; /* Pas de soulignement */
+    text-transform: uppercase; /* Texte en majuscules */
+    letter-spacing: 0.05em; /* Espacement des lettres */
+}
+
+/* Effets au survol des boutons */
+.cta-btn-custom:hover {
+    transform: translateY(-5px) scale(1.02); /* Léger déplacement vers le haut et agrandissement */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Ombre plus intense */
+}
+
+/* Bouton bleu (Se connecter) */
+.blue-btn-custom {
+    background-color: #007bff; /* Bleu vif */
+    color: #ffffff; /* Texte blanc */
+    border: 2px solid #007bff; /* Bordure assortie */
+}
+
+.blue-btn-custom:hover {
+    background-color: #0056b3; /* Bleu plus foncé au survol */
+    border-color: #0056b3;
+}
+
+/* Bouton vert (S'inscrire) */
+.green-btn-custom {
+    background-color: #28a745; /* Vert vif */
+    color: #ffffff; /* Texte blanc */
+    border: 2px solid #28a745; /* Bordure assortie */
+}
+
+.green-btn-custom:hover {
+    background-color: #218838; /* Vert plus foncé au survol */
+    border-color: #218838;
+}
+
+/* Section des avantages */
+.features-custom {
+    text-align: left;
+    margin-top: 2.5rem; /* Marge supérieure */
+    padding: 2rem; /* Espacement interne */
+    background-color: #e6f7ff; /* Fond bleu très clair */
+    border-radius: 0.75rem; /* Bords arrondis */
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05); /* Légère ombre interne */
+}
+
+/* Titre des avantages */
+.h2-custom {
+    font-size: 2rem; /* Taille de police */
+    font-weight: 700; /* Gras */
+    color: #0056b3; /* Bleu foncé */
+    margin-bottom: 1.5rem; /* Marge inférieure */
+    border-bottom: 2px solid #b3e0ff; /* Ligne de séparation */
+    padding-bottom: 0.75rem; /* Espacement sous la ligne */
+}
+
+/* Liste des avantages */
+.ul-custom {
+    list-style: none; /* Pas de puces */
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Espacement entre les éléments de la liste */
+    color: #333; /* Couleur de texte */
+    font-size: 1.1rem; /* Taille de police */
+}
+
+/* Chaque élément de la liste */
+.li-custom {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0; /* Espacement vertical */
+    border-bottom: 1px dashed #cceeff; /* Ligne pointillée de séparation */
+}
+
+.li-custom:last-child {
+    border-bottom: none; /* Pas de bordure pour le dernier élément */
+}
+
+/* Icônes des avantages */
+.icon-custom {
+    color: #007bff; /* Bleu vif pour les icônes */
+    margin-right: 1rem; /* Marge à droite de l'icône */
+    font-size: 1.5rem; /* Taille de l'icône */
+    animation: bounceIn 0.8s ease-out; /* Animation d'apparition rebondissante */
+}
+
+/* Animation de rebond pour les icônes */
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
