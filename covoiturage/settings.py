@@ -1,6 +1,4 @@
 import os
-import pymysql
-pymysql.install_as_MySQLdb()
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,7 +20,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',  # Add the core app
+    'core', 
+    'matching',
 ]
 
 MIDDLEWARE = [
@@ -40,7 +39,7 @@ ROOT_URLCONF = 'covoiturage.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'/'core'],  # Adjust the path to your templates directory
+        'DIRS': [BASE_DIR / 'templates'],  # Adjust the path to your templates directory
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -60,8 +59,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'covoiturage',
-        'USER': 'Lari',
-        'PASSWORD': 'jenesaispas',
+        'USER': 'root',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': '3306',
     }

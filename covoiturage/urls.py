@@ -6,4 +6,5 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
+    path('matching/', include('matching.urls')),
 ]
