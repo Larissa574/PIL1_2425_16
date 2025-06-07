@@ -4,7 +4,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion - Covoiturage pour les Étudiants IFRI</title>
-    <link rel="stylesheet" href="login.css">
+    <style>
+        body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-image: url('image/image.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #333;
+    line-height: 1.6;
+}
+
+.login-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    padding: 2rem 3rem;
+    text-align: center;
+    max-width: 28rem;
+    width: 100%;
+}
+
+.login-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #1d4ed8;
+    margin-bottom: 2rem;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    text-align: left;
+}
+
+.form-label {
+    display: block;
+    color: #4b5563;
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    outline: none;
+    font-size: 1.125rem;
+}
+
+.form-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.login-button {
+    width: 100%;
+    background-color: #2563eb;
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
+    font-size: 1.25rem;
+    cursor: pointer;
+    border: none;
+}
+
+.login-button:hover {
+    background-color: #1d4ed8;
+    transform: scale(1.05);
+}
+
+.signup-link {
+    margin-top: 2rem;
+    color: #4b5563;
+    font-size: 1.125rem;
+}
+
+.signup-anchor {
+    color: #2563eb;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.signup-anchor:hover {
+    color: #1e40af;
+    text-decoration: underline;
+}
+    </style>
 </head>
 <body class="login-body">
     <div class="login-container">
@@ -41,4 +143,3 @@
     </div>
 </body>
 </html>
-
