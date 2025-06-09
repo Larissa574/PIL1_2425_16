@@ -1,1 +1,47 @@
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <style>
+        #chat-log{
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: scroll;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Chat Global</h2>
+    <div id="chat-log"></div>
+    <input type="text" id="chat-message-input" placeholder="Tape ton message....♥♥..." autocomplete="off">
+    <button id="chat-message-send">Envoyer</button>
 
+    <script>
+        // Etablissement de la connexion WebSocket
+        const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/');
+
+        //Affichage du message lorsqu'il est reçu du server
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const chatLog = document.getElementById('chat-log');
+            chatLog.innerHTML+= '<p><strong>' + data.sender + ':</strong> ' + data.message + '</p>';
+        };
+        chatSocket.onclose = function(e) {
+            console.error('La connexion WebSocket a été interrompue de manière innatendue‼');
+        }
+
+        // Envoi du message au serveur lors du clic sur le button
+        document.getElementById('chat-message-send').onclick = function(e) {
+            const messageInputDom = document.getElementById('chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message':message,
+                'expediteur':'Anonyme' // à remplacer après par l'identifiant de l'utilisateur connecté
+            }));
+            messageInputDom.value = '';
+        }
+    </script>
+</body>
+</html>

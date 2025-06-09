@@ -22,6 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core', 
     'matching',
+    'channels',
+    'messagerie',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +55,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'covoiturage.wsgi.application'
+
+ASGI_APPLICATION = 'covoiturage.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+        "CONFIG": {},
+    }
+}
 
 # Database
 DATABASES = {
