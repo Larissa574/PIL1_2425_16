@@ -7,4 +7,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     path('matching/', include('matching.urls')),
+    path('messagerie/', include('messagerie.urls')) # Route pour la messagerie
 ]

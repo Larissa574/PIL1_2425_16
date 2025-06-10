@@ -1,5 +1,8 @@
 import os
 from pathlib import Path
+import pymysql
+pymysql.install_as_MySQLdb()  # Permet à Django de communiquer avec mysql
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -71,7 +74,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'covoiturage',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': '66614',
         'HOST': 'localhost',
         'PORT': '3306',
     }
