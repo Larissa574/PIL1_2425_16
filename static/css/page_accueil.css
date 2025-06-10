@@ -198,7 +198,7 @@
     opacity: 1;
 }
 
-.li-custom span:not(.icon-custom) {
+.li-custom span {
     font-size: 1.1rem;
     line-height: 1.6;
     display: block;
