@@ -2,5 +2,5 @@
 from django.http import HttpResponse
 
 # Create your views here.
-def mmigration_view(request):
-    return HttpResponse('Ceci est la page du matching')
+def migration_view(request):
+    return HttpResponse('Ceci est la page du matching') 

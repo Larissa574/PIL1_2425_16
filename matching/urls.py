@@ -4,5 +4,5 @@ from matching import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", views.mmigration_view),
+    path("", views.migration_view),
 ]
