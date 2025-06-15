@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Demande de covoiturage - IFRI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background-color: #f3f4f6; }
+    .container { display: flex; flex-direction: column; }
+    @media (min-width: 768px) { .container { flex-direction: row; } }
+    .left {
+      flex: 1; background-color: #cfeafe; padding: 2rem;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+    }
+    .left img { width: 120px; margin-bottom: 1rem; }
+    .right {
+      flex: 2; padding: 2rem; background: white; display: flex; align-items: center; justify-content: center;
+    }
+    form {
+      background: white; padding: 2rem; border-radius: 12px;
+      width: 100%; max-width: 700px; box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 { color: #1e40af; text-align: center; }
+    label { font-weight: bold; display: block; margin-top: 1rem; }
+    .input, select {
+      width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc;
+      border-radius: 6px; font-size: 1rem;
+    }
+    button {
+      margin-top: 1.5rem; padding: 12px; background: #2563eb; color: white;
+      border: none; border-radius: 6px; width: 100%; font-weight: bold; cursor: pointer;
+    }
+    button:hover { background: #1e3a8a; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAYAAAA+5+5XAAAABmJLR0QA/wD/AP+gvaeT..." alt="Logo IFRI">
+      <h1>Demande de covoiturage</h1>
+      <p>Formulaire destiné aux passagers IFRI</p>
+    </div>
+    <div class="right">
+      <form>
+        <h2>Publier une demande</h2>
+
+        <label>Nom et Prénom</label>
+        <input type="text" class="input">
+
+        <label>Point de départ</label>
+        <input type="text" class="input">
+
+        <label>Destination</label>
+        <input type="text" class="input">
+
+        <label>Heure de départ souhaitée</label>
+        <input type="time" class="input">
+
+        <label>Nombre de places demandées</label>
+        <input type="number" class="input" min="1" max="6">
+
+        <button type="submit">Soumettre la demande</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
