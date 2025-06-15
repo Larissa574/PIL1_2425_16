@@ -2,40 +2,79 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Inscription - CovoitCampus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Covoiturage pour les Étudiants IFRI</title>
     <link rel="stylesheet" href="../../static/css/register.css">
     <script src="../../static/js/register.js" defer></script>
 </head>
 <body class="register-body">
-    <div class="register-container">
-        <div class="illustration">
-            <img src="../../static/images/illustration_register.png" alt="Inscription Illustration">
-        </div>
-        <form method="POST" class="register-form" enctype="multipart/form-data">
-            <h2>Créer un compte</h2>
-            <input type="text" name="nom" placeholder="Nom" required>
-            <input type="text" name="prenom" placeholder="Prénom" required>
-            <input type="email" name="email" placeholder="Email" required id="email">
-            <small id="email-message" class="error"></small>
-
-            <input type="tel" name="telephone" placeholder="Téléphone" required>
+    <div class="conteneur-inscription">
+        <form method="POST" class="formulaire" enctype="multipart/form-data">
+            <div class="header-site">
+                <img src="../../static/css/images/logoifri.png" alt="Logo IFRI" class="logo-ifri">
+                <span class="nom-site">IFRI_Covoiturage</span>
+            </div>
             
-            <input type="file" name="photo_profil" accept="image/*">
+            <h2>Créer un compte</h2>
+            
+            <div class="groupe">
+                <label for="nom" class="etiquette">Nom</label>
+                <input type="text" id="nom" name="nom" placeholder="Votre nom" required>
+            </div>
+            
+            <div class="groupe">
+                <label for="prenom" class="etiquette">Prénom</label>
+                <input type="text" id="prenom" name="prenom" placeholder="Votre prénom" required>
+            </div>
+            
+            <div class="groupe">
+                <label for="email" class="etiquette">Adresse Email</label>
+                <input type="email" id="email" name="email" placeholder="votre.email@example.com" required>
+                <small id="email-message" class="error"></small>
+            </div>
 
-            <input type="password" name="mot_de_passe" placeholder="Mot de passe" required id="password">
-            <small id="password-rules">8-15 caractères, lettres, chiffres, 1 caractère spécial</small>
-            <input type="checkbox" onclick="togglePassword()"> Afficher le mot de passe
+            <div class="groupe">
+                <label for="telephone" class="etiquette">Téléphone</label>
+                <input type="tel" id="telephone" name="telephone" placeholder="Votre numéro de téléphone" required>
+            </div>
+            
+            <div class="groupe">
+                <label for="photo_profil" class="etiquette">Photo de profil</label>
+                <input type="file" id="photo_profil" name="photo_profil" accept="image/*">
+            </div>
 
-            <select name="role" id="role" onchange="toggleConducteurFields()" required>
-                <option value="">-- Sélectionnez un rôle --</option>
-                <option value="conducteur">Conducteur</option>
-                <option value="passager">Passager</option>
-            </select>
+            <div class="groupe">
+                <label for="password" class="etiquette">Mot de passe</label>
+                <input type="password" id="password" name="mot_de_passe" placeholder="********" required>
+                <small id="password-rules">8-15 caractères, lettres, chiffres, 1 caractère spécial</small>
+                <div class="conteneur-case">
+                    <input type="checkbox" id="show-password" onclick="togglePassword()">
+                    <label for="show-password">Afficher le mot de passe</label>
+                </div>
+            </div>
+
+            <div class="groupe">
+                <label for="role" class="etiquette">Rôle</label>
+                <select name="role" id="role" onchange="toggleConducteurFields()" required>
+                    <option value="">-- Sélectionnez un rôle --</option>
+                    <option value="conducteur">Conducteur</option>
+                    <option value="passager">Passager</option>
+                </select>
+            </div>
 
             <div id="conducteur-fields" style="display:none;">
-                <input type="text" name="marque_voiture" placeholder="Marque du véhicule">
-                <input type="text" name="modele_voiture" placeholder="Modèle du véhicule">
-                <input type="number" name="nb_places" placeholder="Nombre de places" min="1" max="10">
+                <div class="groupe">
+                    <label for="marque_voiture" class="etiquette">Marque du véhicule</label>
+                    <input type="text" id="marque_voiture" name="marque_voiture" placeholder="Marque du véhicule">
+                </div>
+                <div class="groupe">
+                    <label for="modele_voiture" class="etiquette">Modèle du véhicule</label>
+                    <input type="text" id="modele_voiture" name="modele_voiture" placeholder="Modèle du véhicule">
+                </div>
+                <div class="groupe">
+                    <label for="nb_places" class="etiquette">Nombre de places</label>
+                    <input type="number" id="nb_places" name="nb_places" placeholder="Nombre de places" min="1" max="10">
+                </div>
             </div>
 
             <button type="submit">S'inscrire</button>
