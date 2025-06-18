@@ -1,0 +1,154 @@
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-image: url('images/image.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #333;
+    line-height: 1.6;
+}
+
+.conteneur-inscription {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    padding: 2rem 3rem;
+    text-align: center;
+    max-width: 32rem;
+    width: 100%;
+}
+
+.header-site {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.logo-ifri {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.nom-site {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1d4ed8;
+    letter-spacing: 0.025em;
+}
+
+.formulaire {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.formulaire h2 {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #1d4ed8;
+    margin-bottom: 1rem;
+    margin-top: 0;
+}
+
+.groupe {
+    text-align: left;
+}
+
+.etiquette {
+    display: block;
+    color: #4b5563;
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.formulaire input,
+.formulaire select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    outline: none;
+    font-size: 1.125rem;
+    box-sizing: border-box;
+}
+
+.formulaire input:focus,
+.formulaire select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.formulaire input[type="file"] {
+    padding: 0.5rem;
+    background-color: #f9fafb;
+}
+
+.formulaire input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.5rem;
+    transform: scale(1.2);
+}
+
+.formulaire button {
+    width: 100%;
+    background-color: #2563eb;
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
+    font-size: 1.25rem;
+    cursor: pointer;
+    border: none;
+}
+
+.formulaire button:hover {
+    background-color: #1d4ed8;
+    transform: scale(1.05);
+}
+
+.error {
+    color: #dc2626;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+#password-rules {
+    color: #4b5563;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+#conducteur-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.conteneur-case {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.conteneur-case label {
+    color: #4b5563;
+    font-size: 1rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+}

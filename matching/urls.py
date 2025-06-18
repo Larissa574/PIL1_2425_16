@@ -1,8 +1,6 @@
-from django.contrib import admin
 from django.urls import path 
-from matching import views
+from . import views
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("", views.migration_view),
+    path("api/matching/", views.recherche_covoiturage, name = "recherche_covoiturage"),
 ]

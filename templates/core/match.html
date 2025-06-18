@@ -1,1 +1,20 @@
+<!-- Un exemple de page pour l'algorithme de matching -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Matching Dynamique</title>
+</head>
+<body>
+  <div id="resultats-container">
+    <h2>Chargement des trajets.....</h2>
+  </div>
+  <script src="{% static 'js/web.js'  %}"></script>
+  <h1>🧭 Résultats du Matching</h1>
+  <button class="btn" onclick="loadMatching(true)">🔄 Relancer le Matching</button>
 
+  <div id="results"></div>
+</body>
+</html>

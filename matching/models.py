@@ -1,10 +1,10 @@
 from django.db import models
-from core.models import AbstractUser  # à modifier selon le nom utiliser dans le models.py de l'app core
+from core.models import User  # à modifier selon le nom utiliser dans le models.py de l'app core
 
 
 class Trajet(models.Model):
-    conducteur = models.ForeignKey(AbstractUser, on_delete=models.CASCADE, related_name="trajets_offerts", blank=True, null=True)
-    passager = models.ForeignKey(AbstractUser, on_delete= models.CASCADE, related_name= "trajets_demandes", blank=True, null= True)
+    conducteur = models.ForeignKey(User, on_delete=models.CASCADE, related_name="trajets_offerts", blank=True, null=True)
+    passager = models.ForeignKey(User, on_delete= models.CASCADE, related_name= "trajets_demandes", blank=True, null= True)
     pointDeDepart = models.CharField(max_length=255)  # Format "latitude , longitude"
     pointDeArrivee = models.CharField(max_length= 255)
     heureDeDepart = models.TimeField()

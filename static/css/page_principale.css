@@ -1,0 +1,1672 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+.conteneur-principal {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 80px 1fr;
+    min-height: 100vh;
+    margin-left: 280px;
+    grid-template-areas: 
+        "entete"
+        "contenu-principal";
+}
+
+.entete {
+    grid-area: entete;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid #4facfe;
+    border-radius: 12px;
+    margin: 8px;
+    z-index: 1000;
+}
+
+.entete .section-profil {
+    position: relative;
+}
+
+.conteneur-photo-profil {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    border: 3px solid #4facfe;
+    transition: transform 0.3s ease;
+}
+
+.conteneur-photo-profil:hover {
+    transform: scale(1.05);
+}
+
+.photo-profil {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.indicateur-statut {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    background: #4CAF50;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.entete .menu-deroulant-profil {
+    position: absolute;
+    top: 65px;
+    left: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    min-width: 280px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.entete .menu-deroulant-profil.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.entete-menu {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.photo-profil-menu {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.infos-utilisateur h4 {
+    margin: 0;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.infos-utilisateur p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.separateur-menu {
+    height: 1px;
+    background: #eee;
+    margin: 0 1rem;
+}
+
+.element-menu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    color: #666;
+    transition: background-color 0.3s ease;
+}
+
+.element-menu:hover {
+    background: #f8f9fa;
+}
+
+.element-menu.deconnexion {
+    color: #e74c3c;
+}
+
+.element-menu.deconnexion:hover {
+    background: #ffeaea;
+}
+
+.centre-entete {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 1;
+}
+
+#affichageStatutBarre {
+    margin-left: 0.5rem;
+}
+
+.selecteur-role {
+    display: flex;
+    background: #f8f9fa;
+    border-radius: 30px;
+    padding: 4px;
+    gap: 4px;
+}
+
+.bouton-role {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 26px;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.bouton-role.actif {
+    background: white;
+    color: #4facfe;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bouton-role:hover:not(.actif) {
+    color: #4facfe;
+}
+
+.bouton-role i {
+    font-size: 1.1rem;
+}
+
+.droite-entete {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.header-site {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.logo-ifri {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.nom-site {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1d4ed8;
+    letter-spacing: 0.025em;
+}
+
+.barre-laterale {
+    grid-area: barre-laterale;
+    background: #2c3e50;
+    padding: 1rem 0 2rem 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 280px;
+    border: 2.5px solid #4facfe;
+    border-radius: 32px 18px 32px 18px;
+    box-shadow: 0 8px 32px rgba(79, 172, 254, 0.18);
+    z-index: 1002;
+}
+
+.entete-barre-laterale {
+    padding: 0.2rem;
+    border-bottom: 1px solid #34495e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.entete-barre-laterale h3 {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.navigation-barre-laterale {
+    padding: 1rem 0;
+}
+
+.element-navigation {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    color: #bdc3c7;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.element-navigation:hover,
+.element-navigation.actif {
+    background: #34495e;
+    color: white;
+    border-left-color: #4facfe;
+    transform: translateX(5px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.element-navigation i {
+    font-size: 1.2rem;
+    width: 20px;
+    text-align: center;
+}
+
+.contenu-principal {
+    grid-area: contenu-principal;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.entete-contenu {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.entete-contenu h2 {
+    color: white;
+    font-size: 2.2rem;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.01em;
+    font-weight: 700;
+}
+
+.entete-contenu p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.15rem;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+}
+
+.grille-tableau-bord {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 850px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.carte-tableau-bord {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 100%;
+}
+
+.carte-tableau-bord:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.entete-carte {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.icone-carte {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.icone-profil { background: linear-gradient(135deg, #667eea, #764ba2); }
+.icone-conducteur { background: linear-gradient(135deg, #f093fb, #f5576c); }
+.icone-demandes { background: linear-gradient(135deg, #667eea, #764ba2); }
+.icone-vehicule { background: linear-gradient(135deg, #fa709a, #fee140); }
+.icone-recherche { background: linear-gradient(135deg, #fdbb2d, #22c1c3); }
+.icone-trajets { background: linear-gradient(135deg, #89f7fe, #66a6ff); }
+.icone-mes-demandes { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+
+.entete-carte h3 {
+    color: #333;
+    font-size: 1.2rem;
+    font-weight: 600;
+    flex: 1;
+}
+
+.badge-carte {
+    background: #4facfe;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.badge-carte.passager {
+    background: #43e97b;
+}
+
+.interface-conducteur,
+.interface-passager {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.interface-conducteur.hidden,
+.interface-passager.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    color: white;
+    z-index: 3000;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification-success {
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+}
+
+.notification-info {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+.notification-error {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+}
+
+.contenu-carte {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+}
+
+.groupe-formulaire {
+    margin-bottom: 1rem;
+}
+
+.ligne-formulaire {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.groupe-formulaire label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.champ-formulaire {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.champ-formulaire:focus {
+    outline: none;
+    border-color: #4facfe;
+}
+
+.champ-formulaire[readonly] {
+    background-color: #f8f9fa;
+    color: #495057;
+    cursor: default;
+}
+
+.champ-formulaire[type="date"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    background-color: #fff;
+    color: #495057;
+    transition: border-color 0.3s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.champ-formulaire[type="date"]:focus {
+    outline: none;
+    border-color: #4facfe;
+    box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.25);
+}
+
+.champ-formulaire[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+}
+
+.champ-formulaire[type="time"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    background-color: #fff;
+    color: #495057;
+    transition: border-color 0.3s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.champ-formulaire[type="time"]:focus {
+    outline: none;
+    border-color: #4facfe;
+    box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.25);
+}
+
+.bouton-carte {
+    width: 100%;
+    padding: 0.875rem;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bouton-carte:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+}
+
+.bouton-accepter, .bouton-refuser, .bouton-demander, 
+.bouton-annuler-demande, .bouton-contacter {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bouton-accepter {
+    background: #43e97b;
+    color: white;
+}
+
+.bouton-accepter:hover {
+    background: #38d16a;
+}
+
+.bouton-refuser, .bouton-annuler-demande {
+    background: #ff6b6b;
+    color: white;
+}
+
+.bouton-refuser:hover, .bouton-annuler-demande:hover {
+    background: #ee5a24;
+}
+
+.bouton-demander, .bouton-contacter {
+    background: #4facfe;
+    color: white;
+}
+
+.bouton-demander:hover, .bouton-contacter:hover {
+    background: #00a8ff;
+}
+
+.infos-profil,
+.infos-vehicule {
+    margin-bottom: 1.5rem;
+}
+
+.element-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.element-info:last-child {
+    border-bottom: none;
+}
+
+.element-info i {
+    color: #666;
+    width: 20px;
+    text-align: center;
+}
+
+.liste-demandes, .liste-trajets, .liste-mes-demandes {
+    margin-bottom: 1.5rem;
+}
+
+.element-demande, .element-trajet, .element-ma-demande {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.element-demande:last-child, .element-trajet:last-child, .element-ma-demande:last-child {
+    border-bottom: none;
+}
+
+.avatar-demandeur, .avatar-conducteur {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+}
+
+.infos-demande, .infos-trajet {
+    flex: 1;
+}
+
+.nom-demandeur, .nom-conducteur {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+.trajet-demande, .route-trajet {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+}
+
+.heure-demande, .details-trajet {
+    display: block;
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.actions-demande {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.aucune-demande {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #6c757d;
+}
+
+.aucune-demande p {
+    margin: 0;
+    font-style: italic;
+}
+
+.statut-demande {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-align: center;
+    min-width: 80px;
+}
+
+.statut-demande.en-attente {
+    background: #fff3cd;
+    color: #7c6f00;
+}
+
+.statut-demande.acceptee {
+    background: #d4edda;
+    color: #155724;
+}
+
+.details-demande {
+    flex: 1;
+    margin-left: 1rem;
+}
+
+.details-demande strong {
+    display: block;
+    color: #333;
+    margin-bottom: 0.25rem;
+}
+
+.details-demande span {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+@media (max-width: 1200px) {
+    .barre-laterale {
+        width: 250px;
+    }
+    
+    .conteneur-principal {
+        margin-left: 250px;
+    }
+    
+    .grille-tableau-bord {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .conteneur-principal {
+        margin-left: 0;
+        grid-template-rows: 80px auto 1fr;
+        grid-template-areas: 
+            "entete"
+            "barre-laterale"
+            "contenu-principal";
+    }
+    
+    .entete {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .centre-entete {
+        flex: none;
+    }
+    
+    .selecteur-role {
+        transform: scale(0.9);
+    }
+    
+    .nom-site {
+        font-size: 1.2rem;
+    }
+    
+    .barre-laterale {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 1rem 0;
+    }
+    
+    .entete-barre-laterale {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 1rem 2rem;
+    }
+    
+    .navigation-barre-laterale {
+        display: flex;
+        overflow-x: auto;
+        padding: 0 1rem;
+    }
+    
+    .element-navigation {
+        white-space: nowrap;
+        padding: 0.75rem 1rem;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+    }
+    
+    .element-navigation:hover,
+    .element-navigation.actif {
+        border-left: none;
+        border-bottom-color: #4facfe;
+    }
+    
+    .grille-tableau-bord {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .contenu-principal {
+        padding: 1.5rem;
+    }
+    
+    .ligne-formulaire {
+        grid-template-columns: 1fr;
+    }
+    
+    .actions-demande {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .entete-contenu h2 {
+        font-size: 1.5rem;
+    }
+    .entete-contenu p {
+        font-size: 1rem;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.carte-tableau-bord {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.carte-tableau-bord:nth-child(1) { animation-delay: 0.1s; }
+.carte-tableau-bord:nth-child(2) { animation-delay: 0.2s; }
+.carte-tableau-bord:nth-child(3) { animation-delay: 0.3s; }
+.carte-tableau-bord:nth-child(4) { animation-delay: 0.4s; }
+.carte-tableau-bord:nth-child(5) { animation-delay: 0.5s; }
+.carte-tableau-bord:nth-child(6) { animation-delay: 0.6s; }
+
+.section-contenu {
+    width: 100%;
+    height: 100%;
+}
+
+.zone-vide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    margin-top: 2rem;
+}
+
+.zone-vide p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.2rem;
+    font-style: italic;
+    text-align: center;
+}
+
+/* Styles pour la section Profil */
+.conteneur-profil-role {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.grille-profil-role {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Section Informations Personnelles - Toujours en premier */
+.carte-profil-principal {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 3rem;
+    align-items: start;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    order: 1;
+}
+
+/* Grille pour les sections spécifiques aux rôles */
+.grille-sections-role {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    order: 2;
+}
+
+/* Sections spécifiques aux rôles */
+.carte-preferences,
+.carte-vehicule-profil {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.carte-profil-principal:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.section-photo-profil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    width: 250px;
+}
+
+.conteneur-photo-principale {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border: 4px solid white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.conteneur-photo-principale:hover {
+    transform: scale(1.05);
+}
+
+.photo-profil-principale {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.overlay-photo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    gap: 0.5rem;
+}
+
+.conteneur-photo-principale:hover .overlay-photo {
+    opacity: 1;
+}
+
+.bouton-modifier-photo {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.bouton-modifier-photo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+}
+
+.section-infos-personnelles {
+    padding: 1rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.section-infos-personnelles h3 {
+    color: #333;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f1f3f4;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.section-infos-personnelles h3 i {
+    color: #4facfe;
+}
+
+.infos-utilisateur-complet {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.element-info-profil {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.element-info-profil:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+.element-info-profil label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.element-info-profil label i {
+    color: #4facfe;
+    width: 16px;
+    text-align: center;
+}
+
+.valeur-info {
+    color: #333;
+    font-size: 1rem;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.valeur-info:hover {
+    border-color: #4facfe;
+}
+
+.carte-preferences h3,
+.carte-vehicule-profil h3 {
+    color: #333;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f1f3f4;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.carte-preferences h3 i,
+.carte-vehicule-profil h3 i {
+    color: #4facfe;
+}
+
+.infos-preferences,
+.infos-vehicule-profil {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.bouton-modifier-profil {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.bouton-modifier-profil:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+}
+
+.champ-edition-profil {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #4facfe;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: white;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.champ-edition-profil:focus {
+    outline: none;
+    border-color: #00a8ff;
+    box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.25);
+}
+
+@media (max-width: 1200px) {
+    .conteneur-profil-role {
+        grid-template-columns: 1fr;
+    }
+    
+    .carte-profil-principal {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .section-photo-profil {
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .element-info-profil {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .element-info-profil label {
+        justify-content: flex-start;
+    }
+    
+    .section-infos-personnelles {
+        padding: 1rem;
+    }
+    
+    .carte-preferences,
+    .carte-vehicule-profil {
+        padding: 1.5rem;
+    }
+}
+
+.selecteur-role-profil {
+    display: flex;
+    background: linear-gradient(90deg, #e3f0ff 0%, #f8f9fa 100%);
+    border-radius: 30px;
+    padding: 4px 6px;
+    gap: 6px;
+    margin-top: 2px;
+    box-shadow: 0 2px 12px rgba(79, 172, 254, 0.08);
+    align-items: center;
+    justify-content: flex-start;
+    width: fit-content;
+}
+
+.bouton-role-profil {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.6rem;
+    border: none;
+    border-radius: 26px;
+    background: transparent;
+    color: #4facfe;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: background 0.38s cubic-bezier(0.4,0,0.2,1), 
+                color 0.38s cubic-bezier(0.4,0,0.2,1), 
+                box-shadow 0.38s cubic-bezier(0.4,0,0.2,1), 
+                transform 0.28s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 0px 0px rgba(79, 172, 254, 0);
+    position: relative;
+    z-index: 1;
+}
+
+.bouton-role-profil.actif {
+    background: linear-gradient(135deg, #4facfe 60%, #00f2fe 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(79, 172, 254, 0.13);
+    transform: scale(1.06);
+}
+
+.bouton-role-profil:hover:not(.actif) {
+    color: #0077b6;
+    background: #e3f0ff;
+    box-shadow: 0 2px 8px rgba(79, 172, 254, 0.10);
+    transform: scale(1.03);
+}
+
+.bouton-role-profil i {
+    font-size: 1.15rem;
+    margin-right: 2px;
+}
+
+.statut-barre {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: white;
+    color: #4facfe;
+    border-radius: 22px;
+    font-weight: 600;
+    font-size: 0.98rem;
+    padding: 0.45rem 1.1rem;
+    box-shadow: 0 2px 8px rgba(79, 172, 254, 0.08);
+    border: 2px solid #e3f0ff;
+    transition: background 0.3s, color 0.3s;
+}
+
+.statut-barre i {
+    font-size: 1.05rem;
+    color: #4facfe;
+}
+
+.bouton-deconnexion-barre {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+}
+
+.bouton-deconnexion {
+    background: linear-gradient(90deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+    border: none;
+    border-radius: 22px;
+    padding: 0.8rem 2.2rem;
+    font-size: 1.08rem;
+    font-weight: 600;
+    box-shadow: 0 2px 12px rgba(255, 107, 107, 0.10);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    transition: background 0.25s, box-shadow 0.25s, transform 0.18s;
+}
+
+.bouton-deconnexion:hover {
+    background: linear-gradient(90deg, #ee5a24 0%, #ff6b6b 100%);
+    box-shadow: 0 4px 18px rgba(255, 107, 107, 0.18);
+    transform: translateY(-2px) scale(1.04);
+}
+
+.messagerie-wrapper {
+    display: flex;
+    height: calc(100vh - 200px);
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.messagerie-liste {
+    width: 300px;
+    border-right: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+}
+
+.messagerie-entete {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.messagerie-titre {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.liste-conversations {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.conversation {
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 8px;
+}
+
+.conversation:hover {
+    background-color: #f5f5f5;
+}
+
+.conversation.active {
+    background-color: #e3f2fd;
+    border-left: 4px solid #0084ff;
+    box-shadow: 0 2px 8px #0084ff11;
+}
+
+.messagerie-chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-entete {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-titre {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar-chat {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.nom-chat {
+    font-weight: 600;
+    color: #333;
+}
+
+.chat-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.chat-action {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.chat-action:hover {
+    background-color: #f5f5f5;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    max-width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-moi {
+    align-self: flex-end;
+}
+
+.message-autre {
+    align-self: flex-start;
+}
+
+.contenu-message {
+    padding: 10px 15px;
+    border-radius: 12px;
+    background-color: #f0f2f5;
+}
+
+.message-moi .contenu-message {
+    background-color: #0084ff;
+    color: white;
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 16px;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+}
+
+.message-autre .contenu-message {
+    background-color: #f0f2f5;
+    color: #222;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 16px;
+    border-top-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+
+.nom-expediteur {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.texte-message {
+    word-wrap: break-word;
+}
+
+.chat-saisie {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+
+.input-message {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-message:focus {
+    border-color: #0084ff;
+}
+
+.envoyer-message {
+    background-color: #0084ff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.envoyer-message:hover {
+    background-color: #0073e6;
+}
+
+/* Animation pour les nouveaux messages */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.message {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Styles pour l'interface de bienvenue */
+.interface-bienvenue {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 500px;
+    padding: 2rem;
+}
+
+.carte-bienvenue {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(79, 172, 254, 0.15);
+    padding: 3rem;
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    animation: fadeInUp 0.6s ease;
+}
+
+.contenu-bienvenue h3 {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.contenu-bienvenue p {
+    color: #666;
+    font-size: 1.2rem;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+}
+
+.boutons-bienvenue {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.bouton-bienvenue {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: all 0.3s ease;
+    min-width: 280px;
+}
+
+.bouton-bienvenue.conducteur {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+}
+
+.bouton-bienvenue.passager {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    color: white;
+}
+
+.bouton-bienvenue:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.bouton-bienvenue i {
+    font-size: 1.3rem;
+}
+
+@media (max-width: 768px) {
+    .carte-bienvenue {
+        padding: 2rem;
+    }
+
+    .contenu-bienvenue h3 {
+        font-size: 1.5rem;
+    }
+
+    .contenu-bienvenue p {
+        font-size: 1.1rem;
+    }
+
+    .bouton-bienvenue {
+        width: 100%;
+        min-width: auto;
+    }
+}
+
+/* Décorations page d'accueil */
+.decorations-accueil {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    margin: 2.5rem 0 1.5rem 0;
+    font-size: 2.8rem;
+    opacity: 1;
+    pointer-events: none;
+}
+.deco-car {
+    color: #8ecaff;
+    filter: drop-shadow(0 2px 8px #4facfe33);
+    transform: rotate(-10deg) scale(1.2);
+    opacity: 0.85;
+}
+.deco-route {
+    color: #8fffd7;
+    filter: drop-shadow(0 2px 8px #43e97b33);
+    transform: scale(1.1);
+    opacity: 0.85;
+}
+.deco-users {
+    color: #c6b3e6;
+    filter: drop-shadow(0 2px 8px #764ba233);
+    transform: rotate(8deg) scale(1.15);
+    opacity: 0.85;
+}
+
+#texteBienvenueAccueil {
+    color: #555;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    transition: color 0.3s, font-size 0.3s;
+}
+
+@media (max-width: 768px) {
+    .decorations-accueil {
+        font-size: 1.7rem;
+        gap: 1.2rem;
+        margin: 1.2rem 0 0.7rem 0;
+    }
+    #texteBienvenueAccueil {
+        font-size: 1.05rem;
+    }
+}
+
+/* Styles pour le bouton flottant de messagerie */
+.bouton-messagerie-flottant {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.bouton-messagerie-flottant:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff6b6b;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    border: 2px solid white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.bouton-messagerie-flottant.masque {
+    display: none;
+}
+.messagerie-titre-dynamique {
+    background: none;
+    color: #2d3a4a;
+    font-size: 1.7rem;
+    font-weight: 700;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    padding: 1.3rem 0 0.7rem 0;
+    border-radius: 0;
+    letter-spacing: 0.02em;
+    box-shadow: none;
+    margin-bottom: 2.2rem;
+    margin-top: 0;
+    text-align: center;
+    display: block;
+    text-shadow: 0 2px 8px rgba(79,130,254,0.07);
+}
+
+.chat-messages .placeholder-message {
+    color: #888;
+    text-align: center;
+    margin-top: 4rem;
+    font-size: 1.1rem;
+}

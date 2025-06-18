@@ -23,10 +23,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core', 
-    'matching',
-    'channels',
+    'core',
     'messagerie',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -44,7 +43,7 @@ ROOT_URLCONF = 'covoiturage.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Adjust the path to your templates directory
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -63,18 +62,20 @@ ASGI_APPLICATION = 'covoiturage.asgi.application'
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
-        "CONFIG": {},
-    }
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
 }
 
 # Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'covoiturage',
+        'NAME': 'comotorage',
         'USER': 'root',
-        'PASSWORD': '66614',
+        'PASSWORD': 'Desoros66614NOS',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -96,8 +97,20 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+
+# Session configuration
+SESSION_COOKIE_AGE = 1800
+SESSION_SAVE_EVERY_REQUEST = True
+
 # Internationalization
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-fr'
 
 TIME_ZONE = 'UTC'
 
@@ -110,5 +123,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(str(BASE_DIR), 'static')]
-# Dans settings.py
-AUTH_USER_MODEL = 'core.User'
+
+# Custom user model
+AUTH_USER_MODEL = 'core.Utilisateur'
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

@@ -1,0 +1,192 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+
+.conteneur {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Barre latérale */
+.barre-laterale {
+    width: 280px;
+    background: linear-gradient(135deg, #ec9a1e 70%, #006AFF 100%);
+    color: #fff;
+    padding: 30px 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.section-profil {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.conteneur-image-profil {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    margin-bottom: 15px;
+    border-radius: 50%;
+    border: 3px solid #cecece;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-profil {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    display: block;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.section-profil h3 {
+    margin-top: 15px;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.menu-navigation {
+    flex: 1;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255,255,255,0.06);
+    margin-bottom: 10px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.menu-item:hover {
+    background: #E7F3FF;
+    color: #00ff15;
+}
+
+.menu-item i {
+    margin-right: 12px;
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
+}
+
+.bouton-principal {
+    background: linear-gradient(90deg, #0084FF 70%, #00C6FF 100%);
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.bouton-principal:hover {
+    background: linear-gradient(90deg, #00C6FF 70%, #0084FF 100%);
+    color: #fff;
+}
+
+/* Barre du haut */
+.barre-haut {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: #0084FF;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    z-index: 100;
+}
+.icone-haut {
+    margin-left: 25px;
+    font-size: 1.4em;
+    color: #fff;
+    cursor: pointer;
+}
+.icone-haut:hover {
+    color: #00C6FF;
+}
+
+.statut-haut {
+    margin-left: 30px;
+    font-size: 1.1em;
+    color: #333;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+.statut-en-ligne {
+    color: #2EC4B6;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.modal-contenu {
+    background: linear-gradient(120deg, #fff 80%, #E7F3FF 100%);
+    border: 2px solid #0084FF;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+    text-align: center;
+    position: relative;
+}
+.fermer-modal {
+    position: absolute;
+    top: 10px; right: 18px;
+    font-size: 2em;
+    color: #0084FF;
+    cursor: pointer;
+}
+.fermer-modal:hover {
+    color: #00C6FF;
+}
+.contenu-central {
+    margin-left: 270px;
+    margin-top: 70px;
+    padding: 30px 40px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    min-height: 350px;
+}
+.header-central {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.btn-orange, .btn-reserver {
+    background: #0084FF;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-orange:hover, .btn-reserver:hover {
+    background: #006AFF;
+}

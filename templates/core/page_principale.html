@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page principale</title>
+    <link rel="stylesheet" href="../../static/css/page_principale.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="conteneur-principal">
+        <header class="entete">
+            <div class="centre-entete">
+                <div class="selecteur-role" id="affichageStatutBarre">
+                    <span class="statut-barre" id="statutBarreAffiche">
+                        <i class="fas fa-car" id="iconeStatutBarre"></i>
+                        <span id="texteStatutBarre">Conducteur</span>
+                    </span>
+                </div>
+            </div>
+            <div class="droite-entete">
+                <div class="header-site">
+                    <img src="../../static/css/images/logoifri.png" alt="Logo IFRI" class="logo-ifri">
+                    <span class="nom-site">IFRI_Covoiturage</span>
+                </div>
+            </div>
+        </header>
+
+        <aside class="barre-laterale">
+            <div class="entete-barre-laterale">
+                <div class="conteneur-photo-profil">
+                    <img src="../../static/css/images/defaut_profile.png" alt="Photo de profil" class="photo-profil">
+                </div>
+                <h3>{{ utilisateur.prenom }} {{ utilisateur.nom }}</h3>
+                <p style="font-size: 0.9em; color: #888; margin: 0;">{{ utilisateur.email }}</p>
+                <p style="font-size: 0.9em; color: #888; margin: 0;">Rôle : {{ utilisateur.role }}</p>
+            </div>
+            <nav class="navigation-barre-laterale">
+                <a href="#" class="element-navigation" data-section="sectionAccueil">
+                    <i class="fas fa-home"></i>
+                    <span>Accueil</span>
+                </a>
+                <a href="#" class="element-navigation actif" data-section="sectionTableauBord">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Tableau de bord</span>
+                </a>
+                <a href="#" class="element-navigation" data-section="sectionProfil">
+                    <i class="fas fa-user"></i>
+                    <span>Profil</span>
+                </a>
+                <a href="#" class="element-navigation" data-section="sectionMessagerie">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messagerie</span>
+                </a>
+                <a href="#" class="element-navigation" data-section="sectionHistorique">
+                    <i class="fas fa-history"></i>
+                    <span>Historique</span>
+                </a>
+            </nav>
+            <form action="{% url 'connexion' %}">
+                <div class="bouton-deconnexion-barre">
+                    <button type="submit" id="boutonDeconnexion" class="bouton-deconnexion">
+                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                    </button>
+                </div>
+            </form>
+        </aside>
+
+        <main class="contenu-principal">
+            <!-- Section Accueil -->
+            <div class="section-contenu" id="sectionAccueil">
+                <div class="entete-contenu">
+                    <h2>Bienvenue {{ utilisateur.prenom }} {{ utilisateur.nom }} !</h2>
+                    <p>Votre plateforme de comotorage pour l'UAC</p>
+                </div>
+                <div class="interface-bienvenue">
+                    <div class="carte-bienvenue">
+                        <div class="contenu-bienvenue">
+                            <h3>Bienvenue sur votre espace personnel</h3>
+                            <p id="texteBienvenueAccueil">Commencez à utiliser la plateforme en publiant une offre de comotorage ou en recherchant un trajet.</p>
+                            <div class="decorations-accueil">
+                                <i class="fas fa-car-side deco-car"></i>
+                                <i class="fas fa-route deco-route"></i>
+                                <i class="fas fa-users deco-users"></i>
+                            </div>
+                            <div class="boutons-bienvenue">
+                                <button class="bouton-bienvenue conducteur" id="boutonPublierOffre">
+                                    <i class="fas fa-plus-circle"></i>
+                                    Commencer par publier une offre
+                                </button>
+                                <button class="bouton-bienvenue passager" id="boutonLancerRecherche">
+                                    <i class="fas fa-search"></i>
+                                    Lancer une recherche
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section Tableau de bord -->
+            <div class="section-contenu" id="sectionTableauBord" style="display: none;">
+                <div class="entete-contenu">
+                    <h2 id="titreTablleauBord">Tableau de bord conducteur</h2>
+                    <p id="sousTitreTablleauBord">Gérez vos offres et trouvez des passagers</p>
+                </div>
+
+                <!-- Interface Conducteur -->
+                <div class="grille-tableau-bord" id="interfaceConducteur">
+                    <div class="carte-tableau-bord carte-conducteur">
+                        <div class="entete-carte">
+                            <div class="icone-carte icone-conducteur">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <h3>Publier une nouvelle offre</h3>
+                            <span class="badge-carte">Conducteur</span>
+                        </div>
+                        <div class="contenu-carte">
+                            <div class="formulaire-offre">
+                                <div class="groupe-formulaire">
+                                    <label><i class="fas fa-location-arrow"></i> Point de départ</label>
+                                    <input type="text" placeholder="Adresse de départ" class="champ-formulaire">
+                                </div>
+                                <div class="groupe-formulaire">
+                                    <label><i class="fas fa-map-marker-alt"></i> Point d'arrivée</label>
+                                    <input type="text" value="UAC" class="champ-formulaire" readonly>
+                                </div>
+                                <div class="ligne-formulaire">
+                                    <div class="groupe-formulaire">
+                                        <label><i class="fas fa-calendar"></i> Date</label>
+                                        <input type="date" class="champ-formulaire">
+                                    </div>
+                                    <div class="groupe-formulaire">
+                                        <label><i class="fas fa-clock"></i> Heure</label>
+                                        <input type="time" class="champ-formulaire">
+                                    </div>
+                                </div>
+                                <div class="ligne-formulaire">
+                                    <div class="groupe-formulaire">
+                                        <label><i class="fas fa-users"></i> Places disponibles</label>
+                                        <select class="champ-formulaire">
+                                            <option>1 place</option>
+                                            <option>2 places</option>
+                                            <option>3 places</option>
+                                            <option>4 places</option>
+                                        </select>
+                                    </div>
+                                    <div class="groupe-formulaire">
+                                        <label><i class="fas fa-coins"></i> Prix par personne (FCFA)</label>
+                                        <input type="number" placeholder="FCFA" class="champ-formulaire">
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="bouton-carte">
+                                <i class="fas fa-plus"></i>
+                                Publier l'offre
+                            </button>
+                        </div>
+                    </div>
+                    <div class="carte-tableau-bord carte-demandes-recues">
+                        <div class="entete-carte">
+                            <div class="icone-carte icone-demandes">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+                            <h3 id="titreDemandes">Demandes reçues (0)</h3>
+                        </div>
+                        <div class="contenu-carte">
+                            <div class="liste-demandes" id="listeDemandesRecues">
+                                <div class="aucune-demande" id="aucuneDemande">
+                                    <p>Aucune demande reçue pour le moment</p>
+                                </div>
+                            </div>
+                            <button class="bouton-carte" id="boutonVoirDemandes" style="display: none;">
+                                <i class="fas fa-eye"></i>
+                                Voir toutes les demandes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interface Passager -->
+                <div class="grille-tableau-bord" id="interfacePassager" style="display: none;">
+                    <div class="carte-tableau-bord carte-recherche">
+                        <div class="entete-carte">
+                            <div class="icone-carte icone-recherche">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h3>Rechercher un trajet</h3>
+                            <span class="badge-carte passager">Passager</span>
+                        </div>
+                        <div class="contenu-carte">
+                            <div class="formulaire-recherche">
+                                <div class="groupe-formulaire">
+                                    <label><i class="fas fa-location-arrow"></i> Point de départ</label>
+                                    <input type="text" placeholder="D'où partez-vous ?" class="champ-formulaire">
+                                </div>
+                                <div class="groupe-formulaire">
+                                    <label><i class="fas fa-map-marker-alt"></i> Point d'arrivée</label>
+                                    <input type="text" value="UAC" class="champ-formulaire" readonly>
+                                </div>
+                                <div class="ligne-formulaire">
+                                    <div class="groupe-formulaire">
+                                        <label><i class="fas fa-calendar"></i> Date</label>
+                                        <input type="date" class="champ-formulaire">
+                                    </div>
+                                    <div class="groupe-formulaire">
+                                        <label><i class="fas fa-clock"></i> Heure de départ</label>
+                                        <input type="time" class="champ-formulaire">
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="bouton-carte">
+                                <i class="fas fa-search"></i>
+                                Rechercher des trajets
+                            </button>
+                        </div>
+                    </div>
+                    <div class="carte-tableau-bord carte-mes-demandes">
+                        <div class="entete-carte">
+                            <div class="icone-carte icone-mes-demandes">
+                                <i class="fas fa-paper-plane"></i>
+                            </div>
+                            <h3 id="titreMesDemandes">Mes demandes (0)</h3>
+                        </div>
+                        <div class="contenu-carte">
+                            <div class="liste-mes-demandes" id="listeMesDemandes">
+                                <div class="aucune-demande" id="aucuneMaDemande">
+                                    <p>Aucune demande envoyée pour le moment</p>
+                                </div>
+                            </div>
+                            <button class="bouton-carte" id="boutonNouvelleDemande" style="display: none;">
+                                <i class="fas fa-plus"></i>
+                                Nouvelle demande
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Profil -->
+            <div class="section-contenu" id="sectionProfil" style="display: none;">
+                <div class="entete-contenu">
+                    <h2 id="titreProfilRole">Profil Conducteur</h2>
+                    <p id="sousTitreProfilRole">Gérez vos informations de conducteur</p>
+                </div>
+                
+                <!-- Profil Conducteur -->
+                <div class="conteneur-profil-role" id="profilConducteurSection">
+                    <div class="grille-profil-role">
+                        <!-- Section Informations Personnelles -->
+                        <div class="carte-profil-principal">
+                            <div class="section-photo-profil">
+                                <div class="conteneur-photo-principale">
+                                    <img src="../../static/css/images/defaut_profile.png" alt="Photo de profil" class="photo-profil-principale" id="photoProfilPrincipale">
+                                    <div class="overlay-photo">
+                                        <i class="fas fa-camera"></i>
+                                        <span>Changer la photo</span>
+                                    </div>
+                                </div>
+                                <button class="bouton-modifier-photo">
+                                    <i class="fas fa-upload"></i>
+                                    Modifier la photo
+                                </button>
+                            </div>
+                            
+                            <div class="section-infos-personnelles">
+                                <h3><i class="fas fa-user"></i> Informations personnelles</h3>
+                                <div class="infos-utilisateur-complet" id="infosUtilisateurComplet">
+                                    <div class="element-info-profil">
+                                        <label><i class="fas fa-user"></i> Nom complet</label>
+                                        <span class="valeur-info" data-field="nomComplet">{{ utilisateur.prenom }} {{ utilisateur.nom }}</span>
+                                    </div>
+                                    <div class="element-info-profil">
+                                        <label><i class="fas fa-envelope"></i> Email</label>
+                                        <span class="valeur-info" data-field="email">{{ utilisateur.email }}</span>
+                                    </div>
+                                    <div class="element-info-profil">
+                                        <label><i class="fas fa-phone"></i> Téléphone</label>
+                                        <span class="valeur-info" data-field="telephone">{{ utilisateur.telephone }}</span>
+                                    </div>
+                                    <div class="element-info-profil">
+                                        <label><i class="fas fa-map-marker-alt"></i> Adresse</label>
+                                        <span class="valeur-info" data-field="adresse">&mdash;</span>
+                                    </div>
+                                    <div class="element-info-profil">
+                                        <label><i class="fas fa-calendar"></i> Date de naissance</label>
+                                        <span class="valeur-info" data-field="dateNaissance">01/01/1990</span>
+                                    </div>
+                                    <div class="element-info-profil">
+                                        <label><i class="fas fa-user-tag"></i> Statut</label>
+                                        <div class="selecteur-role-profil">
+                                            <span class="valeur-info" data-field="role">{{ utilisateur.role|title }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="bouton-modifier-profil" id="boutonModifierProfilComplet">
+                                    <i class="fas fa-edit"></i>
+                                    Modifier mes informations
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Grille des sections spécifiques au rôle -->
+                        <div class="grille-sections-role">
+                            <!-- Carte profil conducteur -->
+                            <div class="carte-tableau-bord carte-profil" id="carteProfilConducteurProfil">
+                                <div class="entete-carte">
+                                    <div class="icone-carte icone-profil">
+                                        <i class="fas fa-user-edit"></i>
+                                    </div>
+                                    <h3>Mon profil conducteur</h3>
+                                </div>
+                                <div class="contenu-carte">
+                                    <div class="infos-profil" id="infosProfilConducteurProfil">
+                                        <div class="element-info">
+                                            <i class="fas fa-user"></i>
+                                            <span><span data-field="nom">{{ utilisateur.prenom }} {{ utilisateur.nom }}</span></span>
+                                        </div>
+                                        <div class="element-info">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>Départ habituel: <span data-field="depart">Centre-ville</span></span>
+                                        </div>
+                                        <div class="element-info">
+                                            <i class="fas fa-clock"></i>
+                                            <span>Horaire: <span data-field="horaire">08h00 - 17h30</span></span>
+                                        </div>
+                                        <div class="element-info">
+                                            <i class="fas fa-car"></i>
+                                            <span>Véhicule: <span data-field="vehicule">Renault Clio (4 places)</span></span>
+                                        </div>
+                                    </div>
+                                    <button class="bouton-carte" id="boutonModifierProfilConducteurProfil">
+                                        <i class="fas fa-edit"></i>
+                                        Modifier mes infos
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Carte véhicule -->
+                            <div class="carte-tableau-bord carte-vehicule" id="carteVehiculeProfil">
+                                <div class="entete-carte">
+                                    <div class="icone-carte icone-vehicule">
+                                        <i class="fas fa-car-side"></i>
+                                    </div>
+                                    <h3>Mon véhicule</h3>
+                                </div>
+                                <div class="contenu-carte">
+                                    <div class="infos-vehicule" id="infosVehiculeProfil">
+                                        <div class="element-info">
+                                            <i class="fas fa-car"></i>
+                                            <span><span data-field="modele">Renault Clio</span></span>
+                                        </div>
+                                        <div class="element-info">
+                                            <i class="fas fa-palette"></i>
+                                            <span>Couleur: <span data-field="couleur">Blanc</span></span>
+                                        </div>
+                                        <div class="element-info">
+                                            <i class="fas fa-users"></i>
+                                            <span><span data-field="places">4 places disponibles</span></span>
+                                        </div>
+                                    </div>
+                                    <button class="bouton-carte" id="boutonModifierVehiculeProfil">
+                                        <i class="fas fa-edit"></i>
+                                        Modifier le véhicule
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profil Passager -->
+                <div class="conteneur-profil-role" id="profilPassagerSection" style="display: none;">
+                    <div class="grille-profil-role">
+                        <!-- Section Informations Personnelles -->
+                        <div class="carte-profil-principal">
+                            <div class="section-photo-profil">
+                                <div class="conteneur-photo-principale">
+                                    <img src="../../static/css/images/defaut_profile.png" alt="Photo de profil" class="photo-profil-principale" id="photoProfilPrincipalePassager">
+                                    <div class="overlay-photo">
+                                        <i class="fas fa-camera"></i>
+                                        <span>Changer la photo</span>
+                                    </div>
+                                </div>
+                                <button class="bouton-modifier-photo">
+                                    <i class="fas fa-upload"></i>
+                                    Modifier la photo
+                                </button>
+                            </div>
+                            
+                            <div class="section-infos-personnelles">
+                                <h3><i class="fas fa-user"></i> Informations personnelles</h3>
+                                <div class="infos-utilisateur-complet" id="infosUtilisateurCompletPassager">
+                                    <div class="element-info-profil">
+                                        <label><i class="fas fa-user"></i> Nom complet</label>
+                                        <span class="valeur-info" data-field="nomComplet">{{ utilisateur.prenom }} {{ utilisateur.nom }}</span>
+                                    </div>
+                                    <div class="element-info-profil">
+                                        <label><i class="fas fa-envelope"></i> Email</label>
+                                        <span class="valeur-info" data-field="email">{{ utilisateur.email }}</span>
+                                    </div>
+                                    <div class="element-info-profil">
+                                        <label><i class="fas fa-phone"></i> Téléphone</label>
+                                        <span class="valeur-info" data-field="telephone">{{ utilisateur.telephone }}</span>
+                                    </div>
+                                    <div class="element-info-profil">
+                                        <label><i class="fas fa-map-marker-alt"></i> Adresse</label>
+                                        <span class="valeur-info" data-field="adresse">&mdash;</span>
+                                    </div>
+                                    <div class="element-info-profil">
+                                        <label><i class="fas fa-calendar"></i> Date de naissance</label>
+                                        <span class="valeur-info" data-field="dateNaissance">01/01/1990</span>
+                                    </div>
+                                    <div class="element-info-profil">
+                                        <label><i class="fas fa-user-tag"></i> Statut</label>
+                                        <div class="selecteur-role-profil">
+                                            <span class="valeur-info" data-field="role">{{ utilisateur.role|title }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="bouton-modifier-profil" id="boutonModifierProfilCompletPassager">
+                                    <i class="fas fa-edit"></i>
+                                    Modifier mes informations
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Grille des sections spécifiques au rôle -->
+                        <div class="grille-sections-role">
+                            <!-- Carte profil passager -->
+                            <div class="carte-tableau-bord carte-profil" id="carteProfilPassagerProfil">
+                                <div class="entete-carte">
+                                    <div class="icone-carte icone-profil">
+                                        <i class="fas fa-user-edit"></i>
+                                    </div>
+                                    <h3>Mon profil passager</h3>
+                                </div>
+                                <div class="contenu-carte">
+                                    <div class="infos-profil" id="infosProfilPassagerProfil">
+                                        <div class="element-info">
+                                            <i class="fas fa-user"></i>
+                                            <span><span data-field="nom">{{ utilisateur.prenom }} {{ utilisateur.nom }}</span></span>
+                                        </div>
+                                        <div class="element-info">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>Départ habituel: <span data-field="depart">Centre-ville</span></span>
+                                        </div>
+                                        <div class="element-info">
+                                            <i class="fas fa-clock"></i>
+                                            <span>Heure de départ habituel: <span data-field="horaire">08h00</span></span>
+                                        </div>
+                                        <div class="element-info">
+                                            <i class="fas fa-phone"></i>
+                                            <span>Téléphone: <span data-field="telephone">{{ utilisateur.telephone }}</span></span>
+                                        </div>
+                                    </div>
+                                    <button class="bouton-carte" id="boutonModifierProfilPassagerProfil">
+                                        <i class="fas fa-edit"></i>
+                                        Modifier mes infos
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Carte préférences -->
+                            <div class="carte-preferences">
+                                <h3><i class="fas fa-cog"></i> Préférences de covoiturage</h3>
+                                <div class="infos-preferences" id="infosPreferences">
+                                    <div class="element-info-profil">
+                                        <label><i class="fas fa-map-marker-alt"></i> Point de départ habituel</label>
+                                        <span class="valeur-info" data-field="departHabituel">Centre-ville</span>
+                                    </div>
+                                    <div class="element-info-profil">
+                                        <label><i class="fas fa-clock"></i> Horaire de départ habituel</label>
+                                        <span class="valeur-info" data-field="horaireHabituel">08h00</span>
+                                    </div>
+                                </div>
+                                <button class="bouton-modifier-profil" id="boutonModifierPreferences">
+                                    <i class="fas fa-edit"></i>
+                                    Modifier les préférences
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Mes trajets -->
+            <div class="section-contenu" id="sectionMesTrajets" style="display: none;">
+                <div class="entete-contenu">
+                    <h2>Mes trajets</h2>
+                    <p>Consultez l'historique de vos trajets</p>
+                </div>
+                <div class="zone-vide">
+                    <p>Section en construction...</p>
+                </div>
+            </div>
+
+            <!-- Section Messagerie -->
+            <div class="section-contenu" id="sectionMessagerie" style="display: none;">
+                <div class="messagerie-titre-dynamique" id="messagerieTitreDynamique">Rester en contact avec vos clients</div>
+                <div class="messagerie-wrapper">
+                    <!-- Liste des conversations -->
+                    <aside class="messagerie-liste">
+                        <div class="messagerie-entete">
+                            <span class="messagerie-titre"><i class="fas fa-comments"></i> Messagerie</span>
+                        </div>
+                        <ul class="liste-conversations" id="listeConversations">
+                            <!-- Exemple de conversation -->
+                            <li class="conversation active">
+                                <div style="display:flex;align-items:center;gap:1rem;width:100%">
+                                    <img src="../../static/css/images/defaut_profile.png" class="avatar-conv" alt="Avatar" style="border-radius:50%;width:48px;height:48px;object-fit:cover;box-shadow:0 2px 8px #4facfe22;">
+                                    <div class="infos-conv" style="flex:1;display:flex;flex-direction:column;gap:0.2rem;">
+                                        <span class="nom-conv" style="font-weight:700;color:#222;font-size:1.12rem;line-height:1.2;">Needan obli</span>
+                                        <span class="dernier-message" style="color:#8a8a8a;font-size:0.97rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Message Messenger</span>
+                                    </div>
+                                    <span class="heure-conv" style="color:#b0b0b0;font-size:0.95rem;margin-left:0.5rem;">20:59</span>
+                                </div>
+                            </li>
+                            <!-- ... autres conversations dynamiques ... -->
+                        </ul>
+                    </aside>
+                    <!-- Fenêtre de chat -->
+                    <main class="messagerie-chat">
+                        <div class="chat-entete">
+                            <div class="chat-titre">
+                                <img src="../../static/css/images/defaut_profile.png" class="avatar-chat" alt="Avatar">
+                                <span class="nom-chat">Nom d'utilisateur</span>
+                            </div>
+                            <div class="chat-actions">
+                                <button class="chat-action"><i class="fas fa-ellipsis-h"></i></button>
+                            </div>
+                        </div>
+                        <div class="chat-messages" id="chatMessages">
+                            
+                        </div>
+                        <form class="chat-saisie" id="formChat">
+                            <input type="text" class="input-message" id="inputMessage" placeholder="Écrire un message..." autocomplete="off">
+                            <button type="submit" class="envoyer-message"><i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    </main>
+                </div>
+            </div>
+
+            <!-- Section Historique -->
+            <div class="section-contenu" id="sectionHistorique" style="display: none;">
+                <div class="entete-contenu">
+                    <h2>Historique</h2>
+                    <p>Consultez vos trajets passés</p>
+                </div>
+                <div class="historique-list">
+                    
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bouton flottant messagerie -->
+    <div class="bouton-messagerie-flottant" id="boutonMessagerieFlottant">
+        <i class="fas fa-comments"></i>
+    </div>
+
+    <script>
+      var currentUserId = {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}null{% endif %};
+      var currentUsername = {% if request.user.is_authenticated %}"{{ request.user.username|escapejs }}"{% else %}null{% endif %};
+    </script>
+    <script src="../../static/js/page_principale.js"></script>
+</body>
+</html>
