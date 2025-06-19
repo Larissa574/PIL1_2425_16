@@ -124,6 +124,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(str(BASE_DIR), 'static')]
+STATIC_ROOT = os.path.join(str(BASE_DIR), 'staticfiles')
 
 # Custom user model
 AUTH_USER_MODEL = 'core.Utilisateur'
