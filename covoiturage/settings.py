@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'your-default-secret-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'messagerie',
+    'matching',
     'channels',
 ]
 
@@ -73,9 +74,9 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'comotorage',
-        'USER': 'root',
-        'PASSWORD': 'Desoros66614NOS',
+        'NAME': 'campus_comotorage',
+        'USER': 'django_user',
+        'PASSWORD': 'Ratel404',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -126,6 +127,11 @@ STATICFILES_DIRS = [os.path.join(str(BASE_DIR), 'static')]
 
 # Custom user model
 AUTH_USER_MODEL = 'core.Utilisateur'
+
+# Login URL configuration
+LOGIN_URL = '/connexion/'
+LOGIN_REDIRECT_URL = '/page_principale/'
+LOGOUT_REDIRECT_URL = '/connexion/'
 
 # Media files
 MEDIA_URL = '/media/'

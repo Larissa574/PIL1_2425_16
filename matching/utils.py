@@ -33,17 +33,20 @@ def trouver_meilleure_correspondance(passager):
     trajets_conducteurs = Trajet.objects.filter(conducteur__isnull=False, places_disponibles__gt=0)
     trajets_passagers = Trajet.objects.filter(passager=passager)
 
-    correspondance = []
+    correspondances = []
     for trajet_passager in trajets_passagers:
         for trajet_conducteur in trajets_conducteurs:
             score = calculer_distance(trajet_conducteur, trajet_passager)
-            if score> 0:
-                correspondance.append({
+            if score and score > 0:
+                correspondances.append({
                     'conducteur': trajet_conducteur.conducteur,
                     'trajet_conducteur': trajet_conducteur,
                     'trajet_passager': trajet_passager,
                     'score': score
                 })
+
     # Trier les correspondances par score décroissant
-    correspondance.sort(key=lambda x: x[1]['score'], reverse=True)
-    return [trajet for trajet, score in correspondance ]
+    correspondances.sort(key=lambda c: c['score'], reverse=True)
+
+    # Retourner la liste ordonnée des trajets conducteurs correspondant
+    return [c['trajet_conducteur'] for c in correspondances]

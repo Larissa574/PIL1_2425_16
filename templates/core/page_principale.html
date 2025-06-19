@@ -6,6 +6,7 @@
     <title>Page principale</title>
     <link rel="stylesheet" href="../../static/css/page_principale.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBntM7Ly52HdlzLx3G0NrR8+qPj1KoS3ID3SmHg5pE0i8oaGhJZJrGQ0iv/UUNXi6cTSsxpvCrgSmLpmMQ==" crossorigin=""/>
 </head>
 <body>
     <div class="conteneur-principal">
@@ -13,12 +14,18 @@
             <div class="centre-entete">
                 <div class="selecteur-role" id="affichageStatutBarre">
                     <span class="statut-barre" id="statutBarreAffiche">
-                        <i class="fas fa-car" id="iconeStatutBarre"></i>
-                        <span id="texteStatutBarre">Conducteur</span>
+                        <i class="fas fa-{% if utilisateur.role == 'conducteur' %}car{% else %}user{% endif %}" id="iconeStatutBarre"></i>
+                        <span id="texteStatutBarre">{{ utilisateur.role|title }}</span>
                     </span>
                 </div>
             </div>
             <div class="droite-entete">
+                <div class="notifications-header" id="notificationsHeader">
+                    <button class="bouton-notifications" id="boutonNotifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge-notifications" id="badgeNotifications" style="display: none;">0</span>
+                    </button>
+                </div>
                 <div class="header-site">
                     <img src="../../static/css/images/logoifri.png" alt="Logo IFRI" class="logo-ifri">
                     <span class="nom-site">IFRI_Covoiturage</span>
@@ -29,11 +36,9 @@
         <aside class="barre-laterale">
             <div class="entete-barre-laterale">
                 <div class="conteneur-photo-profil">
-                    <img src="../../static/css/images/defaut_profile.png" alt="Photo de profil" class="photo-profil">
+                    <img src="{% if utilisateur.photo %}{{ utilisateur.photo.url }}{% else %}../../static/css/images/defaut_profile.png{% endif %}" alt="Photo de profil" class="photo-profil">
                 </div>
                 <h3>{{ utilisateur.prenom }} {{ utilisateur.nom }}</h3>
-                <p style="font-size: 0.9em; color: #888; margin: 0;">{{ utilisateur.email }}</p>
-                <p style="font-size: 0.9em; color: #888; margin: 0;">Rôle : {{ utilisateur.role }}</p>
             </div>
             <nav class="navigation-barre-laterale">
                 <a href="#" class="element-navigation" data-section="sectionAccueil">
@@ -52,12 +57,9 @@
                     <i class="fas fa-envelope"></i>
                     <span>Messagerie</span>
                 </a>
-                <a href="#" class="element-navigation" data-section="sectionHistorique">
-                    <i class="fas fa-history"></i>
-                    <span>Historique</span>
-                </a>
             </nav>
-            <form action="{% url 'connexion' %}">
+            <form action="{% url 'deconnexion' %}" method="post">
+                {% csrf_token %}
                 <div class="bouton-deconnexion-barre">
                     <button type="submit" id="boutonDeconnexion" class="bouton-deconnexion">
                         <i class="fas fa-sign-out-alt"></i> Déconnexion
@@ -116,10 +118,10 @@
                             <span class="badge-carte">Conducteur</span>
                         </div>
                         <div class="contenu-carte">
-                            <div class="formulaire-offre">
+                            <div class="formulaire-offre" id="formulaireOffre">
                                 <div class="groupe-formulaire">
                                     <label><i class="fas fa-location-arrow"></i> Point de départ</label>
-                                    <input type="text" placeholder="Adresse de départ" class="champ-formulaire">
+                                    <input type="text" placeholder="Adresse de départ" class="champ-formulaire" id="inputDepartOffre">
                                 </div>
                                 <div class="groupe-formulaire">
                                     <label><i class="fas fa-map-marker-alt"></i> Point d'arrivée</label>
@@ -128,35 +130,61 @@
                                 <div class="ligne-formulaire">
                                     <div class="groupe-formulaire">
                                         <label><i class="fas fa-calendar"></i> Date</label>
-                                        <input type="date" class="champ-formulaire">
+                                        <input type="date" class="champ-formulaire" id="inputDateOffre">
                                     </div>
                                     <div class="groupe-formulaire">
                                         <label><i class="fas fa-clock"></i> Heure</label>
-                                        <input type="time" class="champ-formulaire">
+                                        <input type="time" class="champ-formulaire" id="inputHeureOffre">
                                     </div>
                                 </div>
                                 <div class="ligne-formulaire">
                                     <div class="groupe-formulaire">
                                         <label><i class="fas fa-users"></i> Places disponibles</label>
-                                        <select class="champ-formulaire">
-                                            <option>1 place</option>
-                                            <option>2 places</option>
-                                            <option>3 places</option>
-                                            <option>4 places</option>
+                                        <select class="champ-formulaire" id="selectPlacesOffre">
+                                            <option value="1">1 place</option>
+                                            <option value="2">2 places</option>
+                                            <option value="3">3 places</option>
+                                            <option value="4">4 places</option>
                                         </select>
                                     </div>
                                     <div class="groupe-formulaire">
                                         <label><i class="fas fa-coins"></i> Prix par personne (FCFA)</label>
-                                        <input type="number" placeholder="FCFA" class="champ-formulaire">
+                                        <input type="number" placeholder="FCFA" class="champ-formulaire" id="inputPrixOffre">
                                     </div>
                                 </div>
+                                <div class="groupe-formulaire">
+                                    <label><i class="fas fa-comment"></i> Description (optionnelle)</label>
+                                    <textarea placeholder="Décrivez votre trajet..." class="champ-formulaire" id="textareaDescriptionOffre" rows="3"></textarea>
+                                </div>
                             </div>
-                            <button class="bouton-carte">
+                            <button class="bouton-carte" id="boutonPublierOffre">
                                 <i class="fas fa-plus"></i>
                                 Publier l'offre
                             </button>
                         </div>
                     </div>
+                    
+                    <!-- Section Mes offres (cachée initialement) -->
+                    <div class="carte-tableau-bord carte-mes-offres" id="carteMesOffres" style="display: none;">
+                        <div class="entete-carte">
+                            <div class="icone-carte icone-mes-offres">
+                                <i class="fas fa-list-alt"></i>
+                            </div>
+                            <h3 id="titreMesOffres">Mes offres (0)</h3>
+                        </div>
+                        <div class="contenu-carte">
+                            <div class="liste-mes-offres" id="listeMesOffres">
+                                <div class="aucune-offre" id="aucuneOffre">
+                                    <p>Aucune offre publiée pour le moment</p>
+                                </div>
+                            </div>
+                            <button class="bouton-carte" id="boutonVoirOffres" style="display: none;">
+                                <i class="fas fa-eye"></i>
+                                Voir toutes mes offres
+                            </button>
+                        </div>
+                    </div>
+                    
                     <div class="carte-tableau-bord carte-demandes-recues">
                         <div class="entete-carte">
                             <div class="icone-carte icone-demandes">
@@ -180,7 +208,7 @@
 
                 <!-- Interface Passager -->
                 <div class="grille-tableau-bord" id="interfacePassager" style="display: none;">
-                    <div class="carte-tableau-bord carte-recherche">
+                    <div class="carte-tableau-bord carte-recherche" id="carteRecherche">
                         <div class="entete-carte">
                             <div class="icone-carte icone-recherche">
                                 <i class="fas fa-search"></i>
@@ -192,7 +220,7 @@
                             <div class="formulaire-recherche">
                                 <div class="groupe-formulaire">
                                     <label><i class="fas fa-location-arrow"></i> Point de départ</label>
-                                    <input type="text" placeholder="D'où partez-vous ?" class="champ-formulaire">
+                                    <input type="text" placeholder="D'où partez-vous ?" class="champ-formulaire" id="inputRechercheDepart">
                                 </div>
                                 <div class="groupe-formulaire">
                                     <label><i class="fas fa-map-marker-alt"></i> Point d'arrivée</label>
@@ -205,16 +233,34 @@
                                     </div>
                                     <div class="groupe-formulaire">
                                         <label><i class="fas fa-clock"></i> Heure de départ</label>
-                                        <input type="time" class="champ-formulaire">
+                                        <input type="time" class="champ-formulaire" id="inputRechercheHeure">
                                     </div>
                                 </div>
                             </div>
-                            <button class="bouton-carte">
+                            <button class="bouton-carte" id="boutonRechercheTrajets">
                                 <i class="fas fa-search"></i>
                                 Rechercher des trajets
                             </button>
                         </div>
                     </div>
+                    
+                    <!-- Zone résultats qui remplace toute la carte de recherche -->
+                    <div class="carte-tableau-bord" id="zoneResultatsTrajets" style="display:none;">
+                        <div class="entete-carte">
+                            <div class="icone-carte icone-recherche">
+                                <i class="fas fa-map-marked-alt"></i>
+                            </div>
+                            <h3>Résultats de recherche</h3>
+                            <button class="bouton-retour" id="boutonRetourRecherche" style="background:none;border:none;color:#666;cursor:pointer;padding:0.5rem;">
+                                <i class="fas fa-arrow-left"></i> Retour
+                            </button>
+                        </div>
+                        <div class="contenu-carte" style="padding:0;">
+                            <div id="mapResultats" style="height:400px;width:100%;"></div>
+                            <div id="listeConducteursDisponibles" style="padding:1.5rem;"></div>
+                        </div>
+                    </div>
+                    
                     <div class="carte-tableau-bord carte-mes-demandes">
                         <div class="entete-carte">
                             <div class="icone-carte icone-mes-demandes">
@@ -251,16 +297,27 @@
                         <div class="carte-profil-principal">
                             <div class="section-photo-profil">
                                 <div class="conteneur-photo-principale">
-                                    <img src="../../static/css/images/defaut_profile.png" alt="Photo de profil" class="photo-profil-principale" id="photoProfilPrincipale">
+                                    <img src="{% if utilisateur.photo %}{{ utilisateur.photo.url }}{% else %}../../static/css/images/defaut_profile.png{% endif %}" alt="Photo de profil" class="photo-profil-principale" id="photoProfilPrincipale">
                                     <div class="overlay-photo">
                                         <i class="fas fa-camera"></i>
                                         <span>Changer la photo</span>
                                     </div>
                                 </div>
-                                <button class="bouton-modifier-photo">
+                                <button class="bouton-modifier-photo" id="boutonModifierPhoto">
                                     <i class="fas fa-upload"></i>
                                     Modifier la photo
                                 </button>
+                                <input type="file" id="inputPhoto" accept="image/*" style="display: none;">
+                                <div class="actions-photo" id="actionsPhoto" style="display: none;">
+                                    <button class="bouton-appliquer-photo" id="boutonAppliquerPhoto">
+                                        <i class="fas fa-check"></i>
+                                        Appliquer
+                                    </button>
+                                    <button class="bouton-annuler-photo" id="boutonAnnulerPhoto">
+                                        <i class="fas fa-times"></i>
+                                        Annuler
+                                    </button>
+                                </div>
                             </div>
                             
                             <div class="section-infos-personnelles">
@@ -284,12 +341,21 @@
                                     </div>
                                     <div class="element-info-profil">
                                         <label><i class="fas fa-calendar"></i> Date de naissance</label>
-                                        <span class="valeur-info" data-field="dateNaissance">01/01/1990</span>
+                                        <span class="valeur-info" data-field="dateNaissance">{% if utilisateur.date_naissance %}{{ utilisateur.date_naissance|date:"d/m/Y" }}{% else %}--/--/----{% endif %}</span>
                                     </div>
                                     <div class="element-info-profil">
                                         <label><i class="fas fa-user-tag"></i> Statut</label>
-                                        <div class="selecteur-role-profil">
-                                            <span class="valeur-info" data-field="role">{{ utilisateur.role|title }}</span>
+                                        <div class="selecteur-statut-container" id="selecteurStatut">
+                                            <div class="selecteur-statut">
+                                                <button type="button" class="bouton-statut {% if utilisateur.role == 'conducteur' %}actif{% endif %}" data-statut="conducteur" id="boutonConducteur">
+                                                    <i class="fas fa-car"></i>
+                                                    Conducteur
+                                                </button>
+                                                <button type="button" class="bouton-statut {% if utilisateur.role == 'passager' %}actif{% endif %}" data-statut="passager" id="boutonPassager">
+                                                    <i class="fas fa-user"></i>
+                                                    Passager
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -318,15 +384,15 @@
                                         </div>
                                         <div class="element-info">
                                             <i class="fas fa-map-marker-alt"></i>
-                                            <span>Départ habituel: <span data-field="depart">Centre-ville</span></span>
+                                            <span>Départ habituel: <span data-field="depart">{{ utilisateur.depart_habituel|default:"Non renseigné" }}</span></span>
                                         </div>
                                         <div class="element-info">
                                             <i class="fas fa-clock"></i>
-                                            <span>Horaire: <span data-field="horaire">08h00 - 17h30</span></span>
+                                            <span>Horaire: <span data-field="horaire">{% if utilisateur.horaire_debut and utilisateur.horaire_fin %}{{ utilisateur.horaire_debut|time:"H:i" }} - {{ utilisateur.horaire_fin|time:"H:i" }}{% else %}Non renseigné{% endif %}</span></span>
                                         </div>
                                         <div class="element-info">
                                             <i class="fas fa-car"></i>
-                                            <span>Véhicule: <span data-field="vehicule">Renault Clio (4 places)</span></span>
+                                            <span>Véhicule: <span data-field="vehicule">{{ utilisateur.vehicule_marque|default:"Marque de voiture" }} {{ utilisateur.vehicule_modele|default:"Modèle de voiture" }} ({{ utilisateur.vehicule_places|default:4 }} places)</span></span>
                                         </div>
                                     </div>
                                     <button class="bouton-carte" id="boutonModifierProfilConducteurProfil">
@@ -348,15 +414,15 @@
                                     <div class="infos-vehicule" id="infosVehiculeProfil">
                                         <div class="element-info">
                                             <i class="fas fa-car"></i>
-                                            <span><span data-field="modele">Renault Clio</span></span>
+                                            <span>Marque et modèle: <span data-field="marque_modele">{{ utilisateur.vehicule_marque|default:"Marque de voiture" }} {{ utilisateur.vehicule_modele|default:"Modèle de voiture" }}</span></span>
                                         </div>
                                         <div class="element-info">
                                             <i class="fas fa-palette"></i>
-                                            <span>Couleur: <span data-field="couleur">Blanc</span></span>
+                                            <span>Couleur: <span data-field="couleur">{{ utilisateur.vehicule_couleur|default:"Couleur du véhicule" }}</span></span>
                                         </div>
                                         <div class="element-info">
                                             <i class="fas fa-users"></i>
-                                            <span><span data-field="places">4 places disponibles</span></span>
+                                            <span>Places disponibles: <span data-field="places">{{ utilisateur.vehicule_places|default:4 }}</span></span>
                                         </div>
                                     </div>
                                     <button class="bouton-carte" id="boutonModifierVehiculeProfil">
@@ -376,16 +442,27 @@
                         <div class="carte-profil-principal">
                             <div class="section-photo-profil">
                                 <div class="conteneur-photo-principale">
-                                    <img src="../../static/css/images/defaut_profile.png" alt="Photo de profil" class="photo-profil-principale" id="photoProfilPrincipalePassager">
+                                    <img src="{% if utilisateur.photo %}{{ utilisateur.photo.url }}{% else %}../../static/css/images/defaut_profile.png{% endif %}" alt="Photo de profil" class="photo-profil-principale" id="photoProfilPrincipalePassager">
                                     <div class="overlay-photo">
                                         <i class="fas fa-camera"></i>
                                         <span>Changer la photo</span>
                                     </div>
                                 </div>
-                                <button class="bouton-modifier-photo">
+                                <button class="bouton-modifier-photo" id="boutonModifierPhotoPassager">
                                     <i class="fas fa-upload"></i>
                                     Modifier la photo
                                 </button>
+                                <input type="file" id="inputPhotoPassager" accept="image/*" style="display: none;">
+                                <div class="actions-photo" id="actionsPhotoPassager" style="display: none;">
+                                    <button class="bouton-appliquer-photo" id="boutonAppliquerPhotoPassager">
+                                        <i class="fas fa-check"></i>
+                                        Appliquer
+                                    </button>
+                                    <button class="bouton-annuler-photo" id="boutonAnnulerPhotoPassager">
+                                        <i class="fas fa-times"></i>
+                                        Annuler
+                                    </button>
+                                </div>
                             </div>
                             
                             <div class="section-infos-personnelles">
@@ -409,12 +486,21 @@
                                     </div>
                                     <div class="element-info-profil">
                                         <label><i class="fas fa-calendar"></i> Date de naissance</label>
-                                        <span class="valeur-info" data-field="dateNaissance">01/01/1990</span>
+                                        <span class="valeur-info" data-field="dateNaissance">{% if utilisateur.date_naissance %}{{ utilisateur.date_naissance|date:"d/m/Y" }}{% else %}--/--/----{% endif %}</span>
                                     </div>
                                     <div class="element-info-profil">
                                         <label><i class="fas fa-user-tag"></i> Statut</label>
-                                        <div class="selecteur-role-profil">
-                                            <span class="valeur-info" data-field="role">{{ utilisateur.role|title }}</span>
+                                        <div class="selecteur-statut-container" id="selecteurStatutPassager">
+                                            <div class="selecteur-statut">
+                                                <button type="button" class="bouton-statut {% if utilisateur.role == 'conducteur' %}actif{% endif %}" data-statut="conducteur" id="boutonConducteurPassager">
+                                                    <i class="fas fa-car"></i>
+                                                    Conducteur
+                                                </button>
+                                                <button type="button" class="bouton-statut {% if utilisateur.role == 'passager' %}actif{% endif %}" data-statut="passager" id="boutonPassagerPassager">
+                                                    <i class="fas fa-user"></i>
+                                                    Passager
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -443,11 +529,11 @@
                                         </div>
                                         <div class="element-info">
                                             <i class="fas fa-map-marker-alt"></i>
-                                            <span>Départ habituel: <span data-field="depart">Centre-ville</span></span>
+                                            <span>Départ habituel: <span data-field="depart">{{ utilisateur.depart_habituel|default:"Non renseigné" }}</span></span>
                                         </div>
                                         <div class="element-info">
                                             <i class="fas fa-clock"></i>
-                                            <span>Heure de départ habituel: <span data-field="horaire">08h00</span></span>
+                                            <span>Heure de départ habituel: <span data-field="horaire">{% if utilisateur.heure_depart_habituel %}{{ utilisateur.heure_depart_habituel|time:"H:i" }}{% else %}Non renseigné{% endif %}</span></span>
                                         </div>
                                         <div class="element-info">
                                             <i class="fas fa-phone"></i>
@@ -467,11 +553,11 @@
                                 <div class="infos-preferences" id="infosPreferences">
                                     <div class="element-info-profil">
                                         <label><i class="fas fa-map-marker-alt"></i> Point de départ habituel</label>
-                                        <span class="valeur-info" data-field="departHabituel">Centre-ville</span>
+                                        <span class="valeur-info" data-field="departHabituel">{{ utilisateur.depart_habituel|default:"Non renseigné" }}</span>
                                     </div>
                                     <div class="element-info-profil">
                                         <label><i class="fas fa-clock"></i> Horaire de départ habituel</label>
-                                        <span class="valeur-info" data-field="horaireHabituel">08h00</span>
+                                        <span class="valeur-info" data-field="horaireHabituel">{% if utilisateur.heure_depart_habituel %}{{ utilisateur.heure_depart_habituel|time:"H:i" }}{% else %}Non renseigné{% endif %}</span>
                                     </div>
                                 </div>
                                 <button class="bouton-modifier-profil" id="boutonModifierPreferences">
@@ -503,20 +589,28 @@
                     <aside class="messagerie-liste">
                         <div class="messagerie-entete">
                             <span class="messagerie-titre"><i class="fas fa-comments"></i> Messagerie</span>
+                            <div class="filtres-messagerie" id="filtresMessagerie">
+                                <button class="filtre-btn actif" data-filtre="tous">
+                                    <i class="fas fa-users"></i>
+                                    <span>Tous</span>
+                                </button>
+                                <button class="filtre-btn" data-filtre="conducteur">
+                                    <i class="fas fa-car"></i>
+                                    <span>Conducteurs</span>
+                                </button>
+                                <button class="filtre-btn" data-filtre="passager">
+                                    <i class="fas fa-user"></i>
+                                    <span>Passagers</span>
+                                </button>
+                            </div>
+                            <div class="barre-recherche-messagerie">
+                                <input type="text" id="rechercheUtilisateurs" placeholder="Rechercher des utilisateurs..." class="input-recherche-messagerie">
+                                <i class="fas fa-search icone-recherche-messagerie"></i>
+                            </div>
                         </div>
                         <ul class="liste-conversations" id="listeConversations">
-                            <!-- Exemple de conversation -->
-                            <li class="conversation active">
-                                <div style="display:flex;align-items:center;gap:1rem;width:100%">
-                                    <img src="../../static/css/images/defaut_profile.png" class="avatar-conv" alt="Avatar" style="border-radius:50%;width:48px;height:48px;object-fit:cover;box-shadow:0 2px 8px #4facfe22;">
-                                    <div class="infos-conv" style="flex:1;display:flex;flex-direction:column;gap:0.2rem;">
-                                        <span class="nom-conv" style="font-weight:700;color:#222;font-size:1.12rem;line-height:1.2;">Needan obli</span>
-                                        <span class="dernier-message" style="color:#8a8a8a;font-size:0.97rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Message Messenger</span>
-                                    </div>
-                                    <span class="heure-conv" style="color:#b0b0b0;font-size:0.95rem;margin-left:0.5rem;">20:59</span>
-                                </div>
-                            </li>
-                            <!-- ... autres conversations dynamiques ... -->
+                            <!-- Les conversations seront chargées dynamiquement via JavaScript -->
+                            <li style="padding:2rem;color:#888;text-align:center;">Chargement des utilisateurs...</li>
                         </ul>
                     </aside>
                     <!-- Fenêtre de chat -->
@@ -541,16 +635,6 @@
                 </div>
             </div>
 
-            <!-- Section Historique -->
-            <div class="section-contenu" id="sectionHistorique" style="display: none;">
-                <div class="entete-contenu">
-                    <h2>Historique</h2>
-                    <p>Consultez vos trajets passés</p>
-                </div>
-                <div class="historique-list">
-                    
-                </div>
-            </div>
         </main>
     </div>
 
@@ -564,5 +648,6 @@
       var currentUsername = {% if request.user.is_authenticated %}"{{ request.user.username|escapejs }}"{% else %}null{% endif %};
     </script>
     <script src="../../static/js/page_principale.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-1A78B+nOBGFRWHDx8ms+C4UTEg+g1jF+UdiqDP4ibrwH+CV5XVoQ2qX0+WTAcV8JeKVmF0Ky2BLfQMmoGl7Gaw==" crossorigin=""></script>
 </body>
 </html>

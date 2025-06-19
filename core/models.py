@@ -51,9 +51,25 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
     telephone = models.CharField(max_length=15, unique=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     photo = models.ImageField(upload_to='photos_profil/', null=True, blank=True)
+    date_naissance = models.DateField(null=True, blank=True)
+    
+    # Champs profil conducteur
+    depart_habituel = models.CharField(max_length=255, null=True, blank=True, default="Non renseigné")
+    horaire_debut = models.TimeField(null=True, blank=True)
+    horaire_fin = models.TimeField(null=True, blank=True)
+    
+    # Champs véhicule
+    vehicule_marque = models.CharField(max_length=100, null=True, blank=True, default="Marque de voiture")
+    vehicule_modele = models.CharField(max_length=100, null=True, blank=True, default="Modèle de voiture")
+    vehicule_couleur = models.CharField(max_length=50, null=True, blank=True, default="Couleur du véhicule")
+    vehicule_places = models.PositiveIntegerField(null=True, blank=True, default=4)
+    
+    # Champs préférences passager
+    heure_depart_habituel = models.TimeField(null=True, blank=True)
+    
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(auto_now_add=True)
+    date_joined = models.DateTimeField(default=timezone.now)
     derniere_connexion = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = 'email'

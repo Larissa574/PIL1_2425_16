@@ -104,10 +104,7 @@ def geocode_address(address):
             lat = float(data[0]['lat'])
             lon = float(data[0]['lon'])
             return lat, lon
-    except Exception as e:
-        print(f"Erreur de géocodage pour {address}: {e}")
-    
-    return None, None
+    except Exception as e:return None, None
 
 
 def match_offres(demande, exclude_user=None):

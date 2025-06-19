@@ -32,6 +32,12 @@ urlpatterns = [
     path('creer-demande/', views.creer_demande, name='creer_demande'),
     path('reserver-trajet/<int:offre_id>/', views.reserver_trajet, name='reserver_trajet'),
     path('gerer-reservation/<int:reservation_id>/', views.gerer_reservation, name='gerer_reservation'),
+
+    # API pour les offres et demandes
+    path('api/publier-offre/', views.api_publier_offre, name='api_publier_offre'),
+    path('api/mes-offres/', views.api_mes_offres, name='api_mes_offres'),
+    path('api/demandes-recues/', views.api_demandes_recues, name='api_demandes_recues'),
+    path('api/mes-demandes/', views.api_mes_demandes, name='api_mes_demandes'),
 ]
 
 

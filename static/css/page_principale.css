@@ -200,6 +200,66 @@ body {
     gap: 2rem;
 }
 
+/* Styles pour les notifications */
+.notifications-header {
+    display: flex;
+    align-items: center;
+}
+
+.bouton-notifications {
+    position: relative;
+    background: none;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #666;
+    font-size: 1.2rem;
+}
+
+.bouton-notifications:hover {
+    background: rgba(79, 172, 254, 0.1);
+    color: #4facfe;
+    transform: scale(1.1);
+}
+
+.bouton-notifications:active {
+    transform: scale(0.95);
+}
+
+.badge-notifications {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid white;
+    box-shadow: 0 2px 6px rgba(255, 107, 107, 0.3);
+    animation: pulse-notification 2s infinite;
+}
+
+@keyframes pulse-notification {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 .header-site {
     display: flex;
     align-items: center;
@@ -1275,6 +1335,39 @@ body {
     color: #333;
 }
 
+/* Barre de recherche messagerie */
+.barre-recherche-messagerie {
+    position: relative;
+    margin-top: 1rem;
+}
+
+.input-recherche-messagerie {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    padding-right: 2.5rem;
+    border: 1px solid #e5e5e5;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.input-recherche-messagerie:focus {
+    outline: none;
+    border-color: #4facfe;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+}
+
+.icone-recherche-messagerie {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 0.9rem;
+}
+
 .liste-conversations {
     flex: 1;
     overflow-y: auto;
@@ -1669,4 +1762,320 @@ body {
     text-align: center;
     margin-top: 4rem;
     font-size: 1.1rem;
+}
+
+/* Styles pour les boutons de sélection de statut */
+.selecteur-statut-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.selecteur-statut {
+    display: flex;
+    background: #f8f9fa;
+    border-radius: 25px;
+    padding: 3px;
+    gap: 3px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.bouton-statut {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 22px;
+    background: transparent;
+    color: #666;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.bouton-statut::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s;
+}
+
+.bouton-statut:hover::before {
+    left: 100%;
+}
+
+.bouton-statut.actif {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    transform: translateY(-1px);
+}
+
+.bouton-statut[data-statut="conducteur"].actif {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+}
+
+.bouton-statut[data-statut="passager"].actif {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    box-shadow: 0 4px 15px rgba(67, 233, 123, 0.4);
+}
+
+.bouton-statut:hover:not(.actif) {
+    background: rgba(79, 172, 254, 0.1);
+    color: #4facfe;
+    transform: translateY(-1px);
+}
+
+.bouton-statut i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+.bouton-statut.actif i {
+    transform: scale(1.1);
+}
+
+/* Animation de changement de statut */
+.selecteur-statut.changement {
+    animation: pulsation 0.6s ease-in-out;
+}
+
+@keyframes pulsation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive pour les boutons de statut */
+@media (max-width: 768px) {
+    .selecteur-statut {
+        flex-direction: column;
+        background: transparent;
+        padding: 0;
+        gap: 0.5rem;
+        box-shadow: none;
+        border: none;
+    }
+    
+    .bouton-statut {
+        width: 100%;
+        justify-content: center;
+        padding: 1rem;
+        border-radius: 12px;
+        background: #f8f9fa;
+        border: 2px solid #e9ecef;
+    }
+    
+    .bouton-statut.actif {
+        border: 2px solid transparent;
+    }
+}
+
+/* Styles pour les actions photo */
+.actions-photo {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    border: 2px solid #dee2e6;
+    animation: slideInUp 0.3s ease;
+}
+
+.bouton-appliquer-photo,
+.bouton-annuler-photo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.bouton-appliquer-photo {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(67, 233, 123, 0.3);
+}
+
+.bouton-appliquer-photo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(67, 233, 123, 0.4);
+}
+
+.bouton-annuler-photo {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.bouton-annuler-photo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Style pour la photo en mode aperçu */
+.photo-profil-principale.apercu {
+    border: 4px solid #4facfe;
+    box-shadow: 0 4px 20px rgba(79, 172, 254, 0.3);
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+.photo-profil-principale.apercu::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border: 2px solid #00f2fe;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Styles pour le loader de l'upload */
+.photo-loader {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #4facfe;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive pour les actions photo */
+@media (max-width: 768px) {
+    .actions-photo {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.75rem;
+    }
+    
+    .bouton-appliquer-photo,
+    .bouton-annuler-photo {
+        width: 100%;
+        justify-content: center;
+        padding: 1rem;
+        font-size: 1rem;
+    }
+    
+    .photo-profil-principale.apercu {
+        transform: scale(1.02);
+    }
+}
+
+/* Styles pour l'icône de calendrier cliquable */
+.date-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.calendrier-icone {
+    color: #4facfe;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0.3rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+.calendrier-icone:hover {
+    opacity: 1;
+    background-color: rgba(79, 172, 254, 0.1);
+    transform: scale(1.1);
+}
+
+.calendrier-icone:active {
+    transform: scale(0.95);
+}
+
+/* Input de date caché pour le sélecteur */
+.input-date-cache {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 1px;
+    height: 1px;
+}
+
+/* Animation pour le changement de date */
+.date-container.changement .valeur-info {
+    color: #4facfe;
+    font-weight: 600;
+}
+
+.date-container.changement .calendrier-icone {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
 }

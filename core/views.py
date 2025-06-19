@@ -15,18 +15,21 @@ from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Q
 from .forms import EmailValidationForm, CodeVerificationForm, CustomSetPasswordForm
-from .models import PasswordResetCode, OffreCovoiturage, DemandeCovoiturage, ReservationCovoiturage
+from .models import PasswordResetCode, OffreCovoiturage, DemandeCovoiturage, ReservationCovoiturage, Utilisateur
 from .matching import match_offres, geocode_address
 import datetime
 import re
+import json
+from django.utils.decorators import method_decorator
+from django.views import View
 
 
 def accueil(request):
-    return render(request, 'index.html')
+    return render(request, 'core/index.html')
 
 
 def mot_de_passe_oublié_views(request):
-    return render(request,'password_reset.html')  
+    return render(request,'core/password_reset.html')  
 
 def connexion_views(request):
     if request.user.is_authenticated:
@@ -44,15 +47,15 @@ def connexion_views(request):
             return redirect('page_principale')
         else:
             error = 'Identifiants invalides'
-    return render(request, 'login.html', {'error': error})
+    return render(request, 'core/login.html', {'error': error})
 
 def deconnexion_views(request):
     logout(request)
-    return redirect('connexion')
+    return render(request, 'core/deconnexion.html')
 
 @login_required
 def profil_views(request):
-    return render(request, 'profile.html')
+    return render(request, 'core/profile.html')
 
 def inscription_views(request):
     if request.user.is_authenticated:
@@ -90,7 +93,7 @@ def inscription_views(request):
             erreurs.append("Le mot de passe doit contenir un caractère spécial.")
 
         if erreurs:
-            return render(request, 'register.html', {
+            return render(request, 'core/register.html', {
                 'erreurs': erreurs,
                 'donnees': request.POST
             })
@@ -107,7 +110,7 @@ def inscription_views(request):
         login(request, utilisateur)
         return redirect('page_principale')
 
-    return render(request, 'register.html')
+    return render(request, 'core/register.html')
 
 @login_required
 def page_principale_views(request):
@@ -134,7 +137,7 @@ def page_principale_views(request):
             for demande in demandes_match:
                 offres_match.extend(match_offres(demande, exclude_user=utilisateur))
 
-    return render(request, 'page_principale.html', {
+    return render(request, 'core/page_principale.html', {
         'utilisateur': utilisateur,
         'offres': offres,
         'demandes': demandes,
@@ -146,18 +149,103 @@ def page_principale_views(request):
 def update_profil_ajax(request):
     utilisateur = request.user
     try:
+        # Champs de base
         utilisateur.nom = request.POST.get('nom', utilisateur.nom)
         utilisateur.prenom = request.POST.get('prenom', utilisateur.prenom)
         utilisateur.telephone = request.POST.get('telephone', utilisateur.telephone)
         utilisateur.role = request.POST.get('role', utilisateur.role)
+        
+        # Gestion de la date de naissance
+        date_naissance = request.POST.get('date_naissance')
+        if date_naissance:
+            from datetime import datetime
+            try:
+                # Accepter différents formats de date
+                for fmt in ('%Y-%m-%d', '%d/%m/%Y', '%d-%m-%Y'):
+                    try:
+                        date_obj = datetime.strptime(date_naissance, fmt).date()
+                        utilisateur.date_naissance = date_obj
+                        break
+                    except ValueError:
+                        continue
+            except:
+                pass  # Ignore en cas d'erreur de format
+        
+        # Champs profil conducteur
+        if request.POST.get('depart'):
+            utilisateur.depart_habituel = request.POST.get('depart')
+        
+        # Gestion des horaires avec début et fin
+        horaire_debut = request.POST.get('horaire_debut')
+        horaire_fin = request.POST.get('horaire_fin')
+        if horaire_debut:
+            from datetime import datetime
+            try:
+                time_obj = datetime.strptime(horaire_debut, '%H:%M').time()
+                utilisateur.horaire_debut = time_obj
+            except ValueError:
+                pass
+        if horaire_fin:
+            from datetime import datetime
+            try:
+                time_obj = datetime.strptime(horaire_fin, '%H:%M').time()
+                utilisateur.horaire_fin = time_obj
+            except ValueError:
+                pass
+        
+        # Champs véhicule
+        if request.POST.get('vehicule_marque'):
+            utilisateur.vehicule_marque = request.POST.get('vehicule_marque')
+        if request.POST.get('vehicule_modele'):
+            utilisateur.vehicule_modele = request.POST.get('vehicule_modele')
+        if request.POST.get('vehicule_couleur'):
+            utilisateur.vehicule_couleur = request.POST.get('vehicule_couleur')
+        if request.POST.get('vehicule_places'):
+            try:
+                utilisateur.vehicule_places = int(request.POST.get('vehicule_places'))
+            except ValueError:
+                pass
+        
+        # Champs préférences passager
+        heure_depart_habituel = request.POST.get('heure_depart_habituel')
+        if heure_depart_habituel:
+            from datetime import datetime
+            try:
+                time_obj = datetime.strptime(heure_depart_habituel, '%H:%M').time()
+                utilisateur.heure_depart_habituel = time_obj
+            except ValueError:
+                pass
+        
+        # Gestion de l'email
         nouvel_email = request.POST.get('email', utilisateur.email)
         if nouvel_email != utilisateur.email:
             if Utilisateur.objects.filter(email=nouvel_email).exclude(pk=utilisateur.pk).exists():
                 return JsonResponse({'success': False, 'error': "Cet email est déjà utilisé."})
             utilisateur.email = nouvel_email
+        
+        # Gestion de la photo
         if 'photo' in request.FILES:
             utilisateur.photo = request.FILES['photo']
+        
         utilisateur.save()
+        
+        # Formatage des données pour le retour
+        date_naissance_formatted = None
+        if utilisateur.date_naissance:
+            date_naissance_formatted = utilisateur.date_naissance.strftime('%d/%m/%Y')
+        
+        horaire_debut_formatted = None
+        if utilisateur.horaire_debut:
+            horaire_debut_formatted = utilisateur.horaire_debut.strftime('%H:%M')
+        
+        horaire_fin_formatted = None
+        if utilisateur.horaire_fin:
+            horaire_fin_formatted = utilisateur.horaire_fin.strftime('%H:%M')
+        
+        heure_depart_habituel_formatted = None
+        if utilisateur.heure_depart_habituel:
+            heure_depart_habituel_formatted = utilisateur.heure_depart_habituel.strftime('%H:%M')
+        
         return JsonResponse({
             'success': True,
             'nom': utilisateur.nom,
@@ -165,6 +253,15 @@ def update_profil_ajax(request):
             'telephone': utilisateur.telephone,
             'role': utilisateur.role,
             'email': utilisateur.email,
+            'date_naissance': date_naissance_formatted,
+            'depart_habituel': utilisateur.depart_habituel,
+            'horaire_debut': horaire_debut_formatted,
+            'horaire_fin': horaire_fin_formatted,
+            'vehicule_marque': utilisateur.vehicule_marque,
+            'vehicule_modele': utilisateur.vehicule_modele,
+            'vehicule_couleur': utilisateur.vehicule_couleur,
+            'vehicule_places': utilisateur.vehicule_places,
+            'heure_depart_habituel': heure_depart_habituel_formatted,
             'photo_url': utilisateur.photo.url if utilisateur.photo else None
         })
     except Exception as e:
@@ -228,11 +325,11 @@ def password_reset_verify(request):
                 form.add_error('code', 'Code invalide.')
     else:
         form = CodeVerificationForm()
-    return render(request, 'password_reset_verify.html', {'form': form})
+    return render(request, 'core/password_reset_verify.html', {'form': form})
 
 
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):
-    template_name = 'password_reset_confirm.html'
+    template_name = 'core/password_reset_confirm.html'
     form_class = CustomSetPasswordForm
     success_url = reverse_lazy('password_reset_complete')
 
@@ -261,7 +358,7 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
         return super().form_valid(form)
     
 def password_reset_complete(request):
-    return render(request, 'password_reset_complete.html')
+    return render(request, 'core/password_reset_complete.html')
 
     
 # Vues pour le covoiturage
@@ -295,7 +392,7 @@ def creer_offre(request):
             lon_arrivee=lon_arrivee
         )
         return redirect('page_principale')
-    return render(request, 'creer_offre.html')
+    return render(request, 'core/creer_offre.html')
 
 
 @login_required
@@ -326,7 +423,7 @@ def creer_demande(request):
             lon_arrivee=lon_arrivee
         )
         return redirect('page_principale')
-    return render(request, 'creer_demande.html')
+    return render(request, 'core/creer_demande.html')
 
 
 @login_required
@@ -351,7 +448,7 @@ def reserver_trajet(request, offre_id):
         messages.success(request, "Réservation effectuée avec succès.")
         return redirect('page_principale')
     
-    return render(request, 'reserver_trajet.html', {'offre': offre})
+    return render(request, 'core/reserver_trajet.html', {'offre': offre})
 
 
 @login_required
@@ -379,6 +476,168 @@ def gerer_reservation(request, reservation_id):
         messages.success(request, "Statut de la réservation mis à jour.")
         return redirect('page_principale')
     
-    return render(request, 'gerer_reservation.html', {'reservation': reservation})
+    return render(request, 'core/gerer_reservation.html', {'reservation': reservation})
+
+@login_required
+@require_http_methods(["POST"])
+def api_publier_offre(request):
+    try:
+        data = json.loads(request.body)
+        
+        # Validation
+        if not data.get('point_depart'):
+            return JsonResponse({'success': False, 'error': 'Point de départ requis'})
+        if not data.get('date_depart'):
+            return JsonResponse({'success': False, 'error': 'Date de départ requise'})
+        if not data.get('heure_depart'):
+            return JsonResponse({'success': False, 'error': 'Heure de départ requise'})
+        if not data.get('prix') or float(data.get('prix', 0)) <= 0:
+            return JsonResponse({'success': False, 'error': 'Prix valide requis'})
+        
+        # Vérifier que l'utilisateur est conducteur
+        if request.user.role != 'conducteur':
+            return JsonResponse({'success': False, 'error': 'Seuls les conducteurs peuvent publier des offres'})
+        
+        # Créer l'offre
+        offre = OffreCovoiturage.objects.create(
+            conducteur=request.user,
+            point_depart=data['point_depart'],
+            point_arrivee=data.get('point_arrivee', 'UAC'),
+            date_depart=data['date_depart'],
+            heure_depart=data['heure_depart'],
+            places_disponibles=int(data['places_disponibles']),
+            prix=float(data['prix']),
+            description=data.get('description', '')
+        )
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Offre publiée avec succès',
+            'offre_id': offre.id
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+@login_required
+def api_mes_offres(request):
+    try:
+        if request.user.role != 'conducteur':
+            return JsonResponse({'success': False, 'error': 'Accès refusé'})
+        
+        offres = OffreCovoiturage.objects.filter(conducteur=request.user).order_by('-created_at')
+        
+        offres_data = []
+        for offre in offres:
+            # Compter les demandes pour cette offre
+            nb_demandes = ReservationCovoiturage.objects.filter(offre=offre).count()
+            
+            offres_data.append({
+                'id': offre.id,
+                'point_depart': offre.point_depart,
+                'point_arrivee': offre.point_arrivee,
+                'date_depart': offre.date_depart.strftime('%Y-%m-%d'),
+                'heure_depart': offre.heure_depart.strftime('%H:%M'),
+                'places_disponibles': offre.places_disponibles,
+                'prix': str(offre.prix),
+                'description': offre.description,
+                'active': offre.active,
+                'nb_demandes': nb_demandes,
+                'created_at': offre.created_at.strftime('%Y-%m-%d %H:%M')
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'offres': offres_data
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+@login_required
+def api_demandes_recues(request):
+    try:
+        if request.user.role != 'conducteur':
+            return JsonResponse({'success': False, 'error': 'Accès refusé'})
+        
+        # Récupérer toutes les réservations pour les offres du conducteur
+        reservations = ReservationCovoiturage.objects.filter(
+            offre__conducteur=request.user
+        ).select_related('offre', 'passager').order_by('-created_at')
+        
+        demandes_data = []
+        for reservation in reservations:
+            demandes_data.append({
+                'id': reservation.id,
+                'passager': {
+                    'id': reservation.passager.id,
+                    'nom': f"{reservation.passager.prenom} {reservation.passager.nom}",
+                    'avatar': reservation.passager.photo.url if reservation.passager.photo else None,
+                    'email': reservation.passager.email,
+                    'telephone': reservation.passager.telephone
+                },
+                'offre': {
+                    'id': reservation.offre.id,
+                    'point_depart': reservation.offre.point_depart,
+                    'point_arrivee': reservation.offre.point_arrivee,
+                    'date_depart': reservation.offre.date_depart.strftime('%Y-%m-%d'),
+                    'heure_depart': reservation.offre.heure_depart.strftime('%H:%M'),
+                    'prix': str(reservation.offre.prix)
+                },
+                'nombre_places': reservation.nombre_places,
+                'statut': reservation.statut,
+                'created_at': reservation.created_at.strftime('%Y-%m-%d %H:%M')
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'demandes': demandes_data
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+@login_required
+def api_mes_demandes(request):
+    try:
+        if request.user.role != 'passager':
+            return JsonResponse({'success': False, 'error': 'Accès refusé'})
+        
+        # Récupérer toutes les réservations du passager
+        reservations = ReservationCovoiturage.objects.filter(
+            passager=request.user
+        ).select_related('offre', 'offre__conducteur').order_by('-created_at')
+        
+        demandes_data = []
+        for reservation in reservations:
+            demandes_data.append({
+                'id': reservation.id,
+                'offre': {
+                    'id': reservation.offre.id,
+                    'point_depart': reservation.offre.point_depart,
+                    'point_arrivee': reservation.offre.point_arrivee,
+                    'date_depart': reservation.offre.date_depart.strftime('%Y-%m-%d'),
+                    'heure_depart': reservation.offre.heure_depart.strftime('%H:%M'),
+                    'prix': str(reservation.offre.prix),
+                    'conducteur': {
+                        'id': reservation.offre.conducteur.id,
+                        'nom': f"{reservation.offre.conducteur.prenom} {reservation.offre.conducteur.nom}",
+                        'avatar': reservation.offre.conducteur.photo.url if reservation.offre.conducteur.photo else None,
+                        'email': reservation.offre.conducteur.email,
+                        'telephone': reservation.offre.conducteur.telephone
+                    }
+                },
+                'nombre_places': reservation.nombre_places,
+                'statut': reservation.statut,
+                'created_at': reservation.created_at.strftime('%Y-%m-%d %H:%M')
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'demandes': demandes_data
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
 
     
